@@ -1043,6 +1043,7 @@
       <div class="tracker-btns">
         <button class="btn btn-set" onclick="setStartDate()">📅 ابدأ من النهارده</button>
         <button class="btn btn-relapse" onclick="showRelapseModal()">↩ انتكسة</button>
+        <button onclick="showRelapseMessagesModal()" style="background:none;border:1px dashed #DDE3ED;color:#aaa;padding:0.65rem 1rem;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.8rem;font-weight:600;transition:all 0.2s;" title="تعديل رسائلك الشخصية">✏️ رسائلي</button>
       </div>
 
       <!-- Mood Selector -->
@@ -1629,17 +1630,45 @@
   </div>
 </div>
 <div class="modal-overlay" id="relapseModal">
-  <div class="modal">
-    <h3>لحظة صدق</h3>
-    <p>
-      انتكسة ≠ فشل.<br>
-      الفشل الحقيقي هو إنك تقف وما تقومش.<br><br>
-      أنت أكبر من هذه اللحظة.<br>
-      كل يوم عدى كان ربح حقيقي — مش بيتمسح.
-    </p>
+
+  <!-- STEP 1: قبل الانتكاسة -->
+  <div class="modal" id="relapseStep1" style="max-width:520px;">
+    <div style="font-size:0.7rem;color:var(--gold);font-weight:700;letter-spacing:0.1em;margin-bottom:1rem;">⚠️ لحظة — اقرأ الأول</div>
+    <div id="relapseBeforeMsg" style="font-family:'Amiri',serif;font-size:1.05rem;line-height:2;color:var(--text);text-align:right;background:#fffdf5;border:1px solid #e8dfc8;border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:1.25rem;min-height:80px;"></div>
+    <div class="modal-btns" style="flex-direction:column;gap:0.6rem;">
+      <button class="btn-cancel" style="width:100%;padding:0.75rem;font-size:0.95rem;font-weight:700;background:#f0f4f0;color:#2e7d4f;border:1.5px solid #2e7d4f;border-radius:10px;" onclick="closeRelapseModal()">💪 رجعت — مش هانتكس</button>
+      <button onclick="goToRelapseStep2()" style="background:none;border:none;color:#bbb;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.8rem;padding:0.35rem;text-decoration:underline;">انتكست فعلاً — أعد العداد</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: بعد الانتكاسة -->
+  <div class="modal" id="relapseStep2" style="max-width:520px;display:none;">
+    <div style="font-size:0.7rem;color:var(--text-muted);font-weight:700;letter-spacing:0.1em;margin-bottom:1rem;">🌱 اقرأ وتذكر</div>
+    <div id="relapseAfterMsg" style="font-family:'Amiri',serif;font-size:1.05rem;line-height:2;color:var(--text);text-align:right;background:#f5f8ff;border:1px solid #c5d5f0;border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:1.25rem;min-height:80px;"></div>
+    <button class="btn btn-set" onclick="confirmRelapse()" style="width:100%;padding:0.75rem;font-size:0.95rem;">أعد العداد من الصفر — وأبدأ من جديد 🌿</button>
+  </div>
+
+</div>
+
+<!-- SETTINGS MODAL: تعديل رسائل الانتكاسة -->
+<div class="modal-overlay" id="relapseMessagesModal">
+  <div class="modal" style="text-align:right;max-width:560px;">
+    <h3>✏️ رسائلك الشخصية</h3>
+    <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:1.25rem;">اكتب رسالتك بلسانك — دي هتبان ليك في اللحظة المناسبة</p>
+
+    <div style="margin-bottom:1.1rem;">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--gold);margin-bottom:0.4rem;">⚠️ رسالة ما قبل الانتكاسة — (في لحظة الإغراء)</div>
+      <textarea id="beforeMsgInput" placeholder='مثلاً: "يا محمد، فكر في أمك، في ربنا، في الأيام دي كلها اللي فاتت..."' style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.75rem;color:#333;font-family:'Amiri',serif;font-size:0.95rem;min-height:110px;resize:vertical;outline:none;direction:rtl;line-height:1.9;"></textarea>
+    </div>
+
+    <div style="margin-bottom:1.25rem;">
+      <div style="font-size:0.78rem;font-weight:700;color:#5c85c7;margin-bottom:0.4rem;">🌱 رسالة ما بعد الانتكاسة — (بعد ما تعترف)</div>
+      <textarea id="afterMsgInput" placeholder='مثلاً: "الانتكاسة مش نهايتك. قم، اغسل وجهك، وارجع لربنا..."' style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.75rem;color:#333;font-family:'Amiri',serif;font-size:0.95rem;min-height:110px;resize:vertical;outline:none;direction:rtl;line-height:1.9;"></textarea>
+    </div>
+
     <div class="modal-btns">
-      <button class="btn-confirm-relapse" onclick="confirmRelapse()">نعم، أعد العداد من الصفر</button>
-      <button class="btn-cancel" onclick="closeRelapseModal()">رجوع</button>
+      <button class="btn btn-set" onclick="saveRelapseMessages()">💾 حفظ الرسائل</button>
+      <button class="btn-cancel" onclick="document.getElementById('relapseMessagesModal').classList.remove('show')">إلغاء</button>
     </div>
   </div>
 </div>
@@ -1825,7 +1854,23 @@
   }
 
   function showRelapseModal() {
+    // Load before message
+    const beforeMsg = localStorage.getItem('relapse_before_msg') ||
+      'يا محمد — قبل ما تعمل أي حاجة، خد نفس.\n\nفكر في الأيام اللي فاتت دي. كل يوم صبرت فيه كان ربح حقيقي.\n\nالشيطان بيعدك بلحظة — وأنت بتضحي برحلتك كلها.\n\nمحتاج تكتب رسالتك الشخصية — اضغط "رسائلي" في الأسفل.';
+    document.getElementById('relapseBeforeMsg').textContent = beforeMsg;
+
+    // Reset to step 1
+    document.getElementById('relapseStep1').style.display = 'block';
+    document.getElementById('relapseStep2').style.display = 'none';
     document.getElementById('relapseModal').classList.add('show');
+  }
+
+  function goToRelapseStep2() {
+    const afterMsg = localStorage.getItem('relapse_after_msg') ||
+      'الانتكاسة ≠ فشل.\n\nكل الأيام اللي صبرت فيها — محفوظة عند ربنا.\n\nقم دلوقتي، اغسل وجهك، وارجع لربنا.\n\nمحتاج تكتب رسالتك الشخصية — اضغط "رسائلي" في الأسفل.';
+    document.getElementById('relapseAfterMsg').textContent = afterMsg;
+    document.getElementById('relapseStep1').style.display = 'none';
+    document.getElementById('relapseStep2').style.display = 'block';
   }
 
   function closeRelapseModal() {
@@ -1837,6 +1882,23 @@
     updateTracker();
     closeRelapseModal();
     showToast('💪 شجاعتك في الاعتراف دليل قوة — ابدأ من جديد', 'gold');
+  }
+
+  // RELAPSE MESSAGES SETTINGS
+  function showRelapseMessagesModal() {
+    document.getElementById('beforeMsgInput').value = localStorage.getItem('relapse_before_msg') || '';
+    document.getElementById('afterMsgInput').value = localStorage.getItem('relapse_after_msg') || '';
+    document.getElementById('relapseMessagesModal').classList.add('show');
+    setTimeout(() => document.getElementById('beforeMsgInput').focus(), 100);
+  }
+
+  function saveRelapseMessages() {
+    const before = document.getElementById('beforeMsgInput').value.trim();
+    const after = document.getElementById('afterMsgInput').value.trim();
+    if (before) localStorage.setItem('relapse_before_msg', before);
+    if (after) localStorage.setItem('relapse_after_msg', after);
+    document.getElementById('relapseMessagesModal').classList.remove('show');
+    showToast('✅ تم حفظ الرسائل!', 'green');
   }
 
   // SHIELDS
@@ -2064,22 +2126,18 @@
   ];
 
   function showAllahName() {
-    const today = new Date();
-    const idx = (today.getFullYear() * 366 + today.getMonth() * 31 + today.getDate()) % ALLAH_NAMES.length;
+    // Pick a random name every time the page loads
+    const idx = Math.floor(Math.random() * ALLAH_NAMES.length);
     const n = ALLAH_NAMES[idx];
     document.getElementById('allahName').textContent = n.name;
     document.getElementById('allahMeaning').textContent = n.meaning;
     document.getElementById('allahExplain').textContent = n.explain;
-    const lastSeen = localStorage.getItem('allahModalDate');
-    const todayStr = today.toISOString().split('T')[0];
-    if (lastSeen !== todayStr) {
-      document.getElementById('allahModal').classList.add('show');
-    }
+    // Always show on load
+    document.getElementById('allahModal').classList.add('show');
   }
 
   function closeAllahModal() {
     document.getElementById('allahModal').classList.remove('show');
-    localStorage.setItem('allahModalDate', new Date().toISOString().split('T')[0]);
   }
 
   // =============================================
