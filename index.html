@@ -322,6 +322,14 @@
   }
   .btn-relapse:hover { background: rgba(231,76,60,0.1); }
 
+  .btn-emergency {
+    background: #fde8e8;
+    border: 1px solid #f5b8b8;
+    color: #c02020;
+    font-weight: 700;
+  }
+  .btn-emergency:hover { background: #fbd0d0; transform: translateY(-1px); }
+
   /* Milestones */
   .milestones {
     max-width: 700px;
@@ -975,11 +983,234 @@
     margin-bottom: 0.25rem;
   }
 
+  /* Emergency nav tab */
+  .emergency-tab {
+    color: #e03e3e !important;
+    font-weight: 700 !important;
+    border: 1px solid #fde8e8;
+    border-radius: 6px;
+  }
+  .emergency-tab:hover, .emergency-tab.active {
+    background: #fde8e8 !important;
+    color: #c02020 !important;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+    padding: 0 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    flex: 1;
+    min-width: 130px;
+    text-align: center;
+    position: relative;
+  }
+
+  .stat-icon { font-size: 1.3rem; margin-bottom: 0.35rem; }
+
+  .stat-value {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 0.2rem;
+    line-height: 1.3;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .stat-edit-btn {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: #ccc;
+    padding: 2px;
+    transition: color 0.2s;
+  }
+  .stat-edit-btn:hover { color: var(--gold); }
+
+  /* EMERGENCY PAGE */
+  .emergency-page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 3rem;
+  }
+
+  .emergency-top {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .emergency-badge {
+    display: inline-block;
+    background: #fde8e8;
+    color: #c02020;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  .emergency-main-msg {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    line-height: 2;
+    color: #333;
+    background: #fffdf5;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 1.1rem 1.5rem;
+  }
+
+  .emergency-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .emergency-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    position: relative;
+  }
+
+  .rescue-block { border-right: 3px solid #e8c97a; }
+  .shield-block { border-right: 3px solid #a8d5bc; }
+  .video-block  { border-right: 3px solid #a8c4e8; }
+  .stats-block  { border-right: 3px solid #ddd; }
+
+  .eb-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.65rem;
+  }
+
+  .eb-content {
+    font-family: 'Amiri', serif;
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--text);
+  }
+
+  .eb-edit-btn {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    transition: all 0.2s;
+  }
+  .eb-edit-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  .eb-steps { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .eb-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .eb-step-num {
+    width: 22px;
+    height: 22px;
+    background: #e8f5ee;
+    color: #2e7d4f;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .eb-stats-row {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-around;
+    text-align: center;
+    flex-wrap: wrap;
+  }
+
+  .eb-stat-val {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 0.15rem;
+  }
+
+  .eb-stat-label {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+  }
+
+  .emergency-video-btn {
+    display: inline-block;
+    background: #e8f0fb;
+    color: #2563b0;
+    border: 1px solid #b8d0f0;
+    border-radius: 8px;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    font-family: 'Cairo', sans-serif;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .emergency-video-btn:hover { background: #d0e4fa; }
+
+  .emergency-back-btn {
+    display: block;
+    margin: 0 auto;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .emergency-back-btn:hover { border-color: var(--text-dim); color: var(--text); }
+
   @media (max-width: 600px) {
-    .counter-ring { width: 180px; height: 180px; }
-    .counter-number { font-size: 3.5rem; }
-    nav { padding: 0 1rem; }
-    .nav-tab { font-size: 0.75rem; padding: 0.3rem 0.6rem; }
+    .stats-row { gap: 0.5rem; }
+    .stat-card { min-width: 100px; padding: 0.75rem; }
   }
 </style>
 </head>
@@ -998,6 +1229,7 @@
       <button class="nav-tab" onclick="showSection('hope')">💛 الأمل</button>
       <button class="nav-tab" onclick="showSection('plan')">📋 الخطة</button>
       <button class="nav-tab" onclick="showSection('library')">📚 المكتبة</button>
+
     </div>
   </div>
 </nav>
@@ -1043,7 +1275,7 @@
       <div class="tracker-btns">
         <button class="btn btn-set" onclick="setStartDate()">📅 ابدأ من النهارده</button>
         <button class="btn btn-relapse" onclick="showRelapseModal()">↩ انتكسة</button>
-        <button onclick="showRelapseMessagesModal()" style="background:none;border:1px dashed #DDE3ED;color:#aaa;padding:0.65rem 1rem;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.8rem;font-weight:600;transition:all 0.2s;" title="تعديل رسائلك الشخصية">✏️ رسائلي</button>
+        <button class="btn btn-emergency" onclick="openEmergency()">🚨 خطر</button>
       </div>
 
       <!-- Mood Selector -->
@@ -1060,6 +1292,26 @@
             🕊 تعافي
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value" id="statLongest">—</div>
+        <div class="stat-label">أطول فترة ثبات</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value" id="statHardest">—</div>
+        <div class="stat-label">أصعب يوم عديته</div>
+        <button class="stat-edit-btn" onclick="showHardestModal()" title="تسجيل">✏️</button>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔁</div>
+        <div class="stat-value" id="statAttempts">—</div>
+        <div class="stat-label">عدد محاولات التعافي</div>
       </div>
     </div>
 
@@ -1615,9 +1867,91 @@
     </div>
   </div>
 
+  <!-- EMERGENCY -->
+  <div id="section-emergency" class="section">
+    <div class="emergency-page">
+
+      <div class="emergency-top">
+        <div class="emergency-badge">🚨 وقف — اقرأ الأول</div>
+        <div class="emergency-main-msg" id="emergencyMainMsg">
+          جارٍ التحميل...
+        </div>
+      </div>
+
+      <div class="emergency-blocks">
+
+        <!-- جملة الإنقاذ -->
+        <div class="emergency-block rescue-block">
+          <div class="eb-label">⚡ جملة الإنقاذ بتاعتك</div>
+          <div class="eb-content" id="emergencyRescueMsg">اضغط تعديل وأكتب الجملة اللي بتفوقك</div>
+          <button class="eb-edit-btn" onclick="showEmergencyEdit('rescue')">✏️ تعديل</button>
+        </div>
+
+        <!-- الدرع الطوارئ مباشرة -->
+        <div class="emergency-block shield-block">
+          <div class="eb-label">🛡 درع الطوارئ — نفّذ دلوقتي</div>
+          <div class="eb-steps">
+            <div class="eb-step"><span class="eb-step-num">١</span><span>"حركة!" — قوم من مكانك دلوقتي وأخرج من الأوضة</span></div>
+            <div class="eb-step"><span class="eb-step-num">٢</span><span>"ميه!" — اغسل وجهك ورقبتك بماء بارد</span></div>
+            <div class="eb-step"><span class="eb-step-num">٣</span><span>"أعوذ بالله من الشيطان الرجيم" — قولها بصوت</span></div>
+            <div class="eb-step"><span class="eb-step-num">٤</span><span>"ده خيانة لله في نعمة عيني" — تذكّر</span></div>
+          </div>
+        </div>
+
+        <!-- فيديو / مصدر الإنقاذ -->
+        <div class="emergency-block video-block">
+          <div class="eb-label">🎬 مصدر الإنقاذ بتاعك</div>
+          <div class="eb-content" id="emergencyVideoMsg">اضغط تعديل وأضف رابط الفيديو أو الكلام اللي بيأثر فيك</div>
+          <div id="emergencyVideoLink" style="display:none;margin-top:0.6rem;">
+            <a id="emergencyVideoHref" href="#" target="_blank" class="emergency-video-btn">▶ افتح الفيديو دلوقتي</a>
+          </div>
+          <button class="eb-edit-btn" onclick="showEmergencyEdit('video')">✏️ تعديل</button>
+        </div>
+
+        <!-- إحصائية التشجيع -->
+        <div class="emergency-block stats-block">
+          <div class="eb-label">💪 تذكر — عديت ده قبل كده</div>
+          <div class="eb-stats-row">
+            <div class="eb-stat"><div class="eb-stat-val" id="emLongest">—</div><div class="eb-stat-label">أطول فترة ثبات</div></div>
+            <div class="eb-stat"><div class="eb-stat-val" id="emHardest">—</div><div class="eb-stat-label">أصعب يوم عديته</div></div>
+            <div class="eb-stat"><div class="eb-stat-val" id="emCurrent">—</div><div class="eb-stat-label">يومك الحالي</div></div>
+          </div>
+        </div>
+
+      </div>
+
+      <button class="emergency-back-btn" onclick="showSection_emergency_back()">← رجوع للموقع</button>
+    </div>
+  </div>
+
 </main>
 
-<!-- Add Pattern Modal -->
+<!-- HARDEST DAY MODAL -->
+<div class="modal-overlay" id="hardestModal">
+  <div class="modal" style="text-align:right;">
+    <h3>⚡ سجّل أصعب يوم عديته</h3>
+    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">ده مش بس رقم — ده دليل إنك أقوى من أصعب لحظة</p>
+    <input id="hardestInput" type="text" placeholder='مثلاً: "اليوم الخامس — بعد ليلة ضغط شديد"'
+      style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.9rem;outline:none;direction:rtl;margin-bottom:0.5rem;">
+    <div class="modal-btns" style="margin-top:0.75rem;">
+      <button class="btn btn-set" onclick="saveHardestDay()">💾 حفظ</button>
+      <button class="btn-cancel" onclick="document.getElementById('hardestModal').classList.remove('show')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- EMERGENCY EDIT MODAL -->
+<div class="modal-overlay" id="emergencyEditModal">
+  <div class="modal" style="text-align:right;max-width:520px;">
+    <h3 id="emergencyEditTitle">تعديل</h3>
+    <p id="emergencyEditDesc" style="font-size:0.83rem;color:var(--text-muted);margin-bottom:0.75rem;"></p>
+    <textarea id="emergencyEditInput" style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.75rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.9rem;min-height:90px;resize:vertical;outline:none;direction:rtl;line-height:1.8;"></textarea>
+    <div class="modal-btns" style="margin-top:1rem;">
+      <button class="btn btn-set" onclick="saveEmergencyEdit()">💾 حفظ</button>
+      <button class="btn-cancel" onclick="document.getElementById('emergencyEditModal').classList.remove('show')">إلغاء</button>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="addPatternModal">
   <div class="modal" style="text-align:right;">
     <h3 id="addModalTitle">إضافة نمط جديد</h3>
@@ -1630,45 +1964,17 @@
   </div>
 </div>
 <div class="modal-overlay" id="relapseModal">
-
-  <!-- STEP 1: قبل الانتكاسة -->
-  <div class="modal" id="relapseStep1" style="max-width:520px;">
-    <div style="font-size:0.7rem;color:var(--gold);font-weight:700;letter-spacing:0.1em;margin-bottom:1rem;">⚠️ لحظة — اقرأ الأول</div>
-    <div id="relapseBeforeMsg" style="font-family:'Amiri',serif;font-size:1.05rem;line-height:2;color:var(--text);text-align:right;background:#fffdf5;border:1px solid #e8dfc8;border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:1.25rem;min-height:80px;"></div>
-    <div class="modal-btns" style="flex-direction:column;gap:0.6rem;">
-      <button class="btn-cancel" style="width:100%;padding:0.75rem;font-size:0.95rem;font-weight:700;background:#f0f4f0;color:#2e7d4f;border:1.5px solid #2e7d4f;border-radius:10px;" onclick="closeRelapseModal()">💪 رجعت — مش هانتكس</button>
-      <button onclick="goToRelapseStep2()" style="background:none;border:none;color:#bbb;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.8rem;padding:0.35rem;text-decoration:underline;">انتكست فعلاً — أعد العداد</button>
-    </div>
-  </div>
-
-  <!-- STEP 2: بعد الانتكاسة -->
-  <div class="modal" id="relapseStep2" style="max-width:520px;display:none;">
-    <div style="font-size:0.7rem;color:var(--text-muted);font-weight:700;letter-spacing:0.1em;margin-bottom:1rem;">🌱 اقرأ وتذكر</div>
-    <div id="relapseAfterMsg" style="font-family:'Amiri',serif;font-size:1.05rem;line-height:2;color:var(--text);text-align:right;background:#f5f8ff;border:1px solid #c5d5f0;border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:1.25rem;min-height:80px;"></div>
-    <button class="btn btn-set" onclick="confirmRelapse()" style="width:100%;padding:0.75rem;font-size:0.95rem;">أعد العداد من الصفر — وأبدأ من جديد 🌿</button>
-  </div>
-
-</div>
-
-<!-- SETTINGS MODAL: تعديل رسائل الانتكاسة -->
-<div class="modal-overlay" id="relapseMessagesModal">
-  <div class="modal" style="text-align:right;max-width:560px;">
-    <h3>✏️ رسائلك الشخصية</h3>
-    <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:1.25rem;">اكتب رسالتك بلسانك — دي هتبان ليك في اللحظة المناسبة</p>
-
-    <div style="margin-bottom:1.1rem;">
-      <div style="font-size:0.78rem;font-weight:700;color:var(--gold);margin-bottom:0.4rem;">⚠️ رسالة ما قبل الانتكاسة — (في لحظة الإغراء)</div>
-      <textarea id="beforeMsgInput" placeholder='مثلاً: "يا محمد، فكر في أمك، في ربنا، في الأيام دي كلها اللي فاتت..."' style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.75rem;color:#333;font-family:'Amiri',serif;font-size:0.95rem;min-height:110px;resize:vertical;outline:none;direction:rtl;line-height:1.9;"></textarea>
-    </div>
-
-    <div style="margin-bottom:1.25rem;">
-      <div style="font-size:0.78rem;font-weight:700;color:#5c85c7;margin-bottom:0.4rem;">🌱 رسالة ما بعد الانتكاسة — (بعد ما تعترف)</div>
-      <textarea id="afterMsgInput" placeholder='مثلاً: "الانتكاسة مش نهايتك. قم، اغسل وجهك، وارجع لربنا..."' style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.75rem;color:#333;font-family:'Amiri',serif;font-size:0.95rem;min-height:110px;resize:vertical;outline:none;direction:rtl;line-height:1.9;"></textarea>
-    </div>
-
+  <div class="modal">
+    <h3>لحظة صدق</h3>
+    <p>
+      انتكسة ≠ فشل.<br>
+      الفشل الحقيقي هو إنك تقف وما تقومش.<br><br>
+      أنت أكبر من هذه اللحظة.<br>
+      كل يوم عدى كان ربح حقيقي — مش بيتمسح.
+    </p>
     <div class="modal-btns">
-      <button class="btn btn-set" onclick="saveRelapseMessages()">💾 حفظ الرسائل</button>
-      <button class="btn-cancel" onclick="document.getElementById('relapseMessagesModal').classList.remove('show')">إلغاء</button>
+      <button class="btn-confirm-relapse" onclick="confirmRelapse()">نعم، أعد العداد من الصفر</button>
+      <button class="btn-cancel" onclick="closeRelapseModal()">رجوع</button>
     </div>
   </div>
 </div>
@@ -1789,6 +2095,13 @@
     event.currentTarget.classList.add('active');
   }
 
+  function openEmergency() {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('section-emergency').classList.add('active');
+    loadEmergencyContent();
+  }
+
   // TAFSEER TOGGLE
   function toggleTafseer(btn) {
     const body = btn.nextElementSibling;
@@ -1854,23 +2167,7 @@
   }
 
   function showRelapseModal() {
-    // Load before message
-    const beforeMsg = localStorage.getItem('relapse_before_msg') ||
-      'يا محمد — قبل ما تعمل أي حاجة، خد نفس.\n\nفكر في الأيام اللي فاتت دي. كل يوم صبرت فيه كان ربح حقيقي.\n\nالشيطان بيعدك بلحظة — وأنت بتضحي برحلتك كلها.\n\nمحتاج تكتب رسالتك الشخصية — اضغط "رسائلي" في الأسفل.';
-    document.getElementById('relapseBeforeMsg').textContent = beforeMsg;
-
-    // Reset to step 1
-    document.getElementById('relapseStep1').style.display = 'block';
-    document.getElementById('relapseStep2').style.display = 'none';
     document.getElementById('relapseModal').classList.add('show');
-  }
-
-  function goToRelapseStep2() {
-    const afterMsg = localStorage.getItem('relapse_after_msg') ||
-      'الانتكاسة ≠ فشل.\n\nكل الأيام اللي صبرت فيها — محفوظة عند ربنا.\n\nقم دلوقتي، اغسل وجهك، وارجع لربنا.\n\nمحتاج تكتب رسالتك الشخصية — اضغط "رسائلي" في الأسفل.';
-    document.getElementById('relapseAfterMsg').textContent = afterMsg;
-    document.getElementById('relapseStep1').style.display = 'none';
-    document.getElementById('relapseStep2').style.display = 'block';
   }
 
   function closeRelapseModal() {
@@ -1878,27 +2175,21 @@
   }
 
   function confirmRelapse() {
+    // Save longest streak before reset
+    const currentDays = calcDays(getStartDate());
+    const prevLongest = parseInt(localStorage.getItem('stat_longest') || '0');
+    if (currentDays > prevLongest) {
+      localStorage.setItem('stat_longest', currentDays);
+    }
+    // Increment attempts
+    const attempts = parseInt(localStorage.getItem('stat_attempts') || '1');
+    localStorage.setItem('stat_attempts', attempts + 1);
+    // Reset
     localStorage.removeItem('recoveryStart');
     updateTracker();
+    updateStats();
     closeRelapseModal();
     showToast('💪 شجاعتك في الاعتراف دليل قوة — ابدأ من جديد', 'gold');
-  }
-
-  // RELAPSE MESSAGES SETTINGS
-  function showRelapseMessagesModal() {
-    document.getElementById('beforeMsgInput').value = localStorage.getItem('relapse_before_msg') || '';
-    document.getElementById('afterMsgInput').value = localStorage.getItem('relapse_after_msg') || '';
-    document.getElementById('relapseMessagesModal').classList.add('show');
-    setTimeout(() => document.getElementById('beforeMsgInput').focus(), 100);
-  }
-
-  function saveRelapseMessages() {
-    const before = document.getElementById('beforeMsgInput').value.trim();
-    const after = document.getElementById('afterMsgInput').value.trim();
-    if (before) localStorage.setItem('relapse_before_msg', before);
-    if (after) localStorage.setItem('relapse_after_msg', after);
-    document.getElementById('relapseMessagesModal').classList.remove('show');
-    showToast('✅ تم حفظ الرسائل!', 'green');
   }
 
   // SHIELDS
@@ -2126,18 +2417,22 @@
   ];
 
   function showAllahName() {
-    // Pick a random name every time the page loads
-    const idx = Math.floor(Math.random() * ALLAH_NAMES.length);
+    const today = new Date();
+    const idx = (today.getFullYear() * 366 + today.getMonth() * 31 + today.getDate()) % ALLAH_NAMES.length;
     const n = ALLAH_NAMES[idx];
     document.getElementById('allahName').textContent = n.name;
     document.getElementById('allahMeaning').textContent = n.meaning;
     document.getElementById('allahExplain').textContent = n.explain;
-    // Always show on load
-    document.getElementById('allahModal').classList.add('show');
+    const lastSeen = localStorage.getItem('allahModalDate');
+    const todayStr = today.toISOString().split('T')[0];
+    if (lastSeen !== todayStr) {
+      document.getElementById('allahModal').classList.add('show');
+    }
   }
 
   function closeAllahModal() {
     document.getElementById('allahModal').classList.remove('show');
+    localStorage.setItem('allahModalDate', new Date().toISOString().split('T')[0]);
   }
 
   // =============================================
@@ -2455,6 +2750,127 @@
   renderCustomHopes();
   renderCustomLosses();
   renderLibrary();
+  // =============================================
+  // STATS CARDS
+  // =============================================
+  function updateStats() {
+    const longest = localStorage.getItem('stat_longest') || '—';
+    const hardest = localStorage.getItem('stat_hardest') || '—';
+    const attempts = parseInt(localStorage.getItem('stat_attempts') || '1');
+    const currentDays = calcDays(getStartDate());
+
+    document.getElementById('statLongest').textContent = longest === '—' ? '—' : longest + ' يوم';
+    document.getElementById('statHardest').textContent = hardest;
+    document.getElementById('statAttempts').textContent = attempts + (attempts === 1 ? ' محاولة' : ' محاولات');
+
+    // Update emergency page stats too
+    if (document.getElementById('emLongest')) {
+      document.getElementById('emLongest').textContent = longest === '—' ? '—' : longest + ' يوم';
+      document.getElementById('emHardest').textContent = hardest === '—' ? '—' : hardest;
+      document.getElementById('emCurrent').textContent = currentDays + ' يوم';
+    }
+
+    // Track longest streak: when relapse happens, compare with saved
+    const currentLongest = parseInt(localStorage.getItem('stat_longest') || '0');
+    if (currentDays > currentLongest) {
+      localStorage.setItem('stat_longest', currentDays);
+    }
+  }
+
+  function showHardestModal() {
+    document.getElementById('hardestInput').value = localStorage.getItem('stat_hardest') || '';
+    document.getElementById('hardestModal').classList.add('show');
+    setTimeout(() => document.getElementById('hardestInput').focus(), 100);
+  }
+
+  function saveHardestDay() {
+    const val = document.getElementById('hardestInput').value.trim();
+    if (!val) return;
+    localStorage.setItem('stat_hardest', val);
+    document.getElementById('hardestModal').classList.remove('show');
+    updateStats();
+    showToast('✅ تم الحفظ — ده دليل قوتك!', 'green');
+  }
+
+  // =============================================
+  // EMERGENCY PAGE
+  // =============================================
+  function loadEmergencyContent() {
+    // Main message (before msg or default)
+    const beforeMsg = localStorage.getItem('relapse_before_msg') ||
+      'لحظة واحدة بس.\n\nالشيطان بيكدب عليك دلوقتي — هو بيعدك بثانية واحدة، وأنت هتخسر رحلتك كلها.\n\nمش لازم تقاوم لحظة طويلة — بس خطوة واحدة دلوقتي.';
+    document.getElementById('emergencyMainMsg').textContent = beforeMsg;
+
+    // Rescue sentence
+    const rescue = localStorage.getItem('emergency_rescue') || 'اكتب هنا الجملة اللي بتفوقك — اللي بتقدر تقف عندها';
+    document.getElementById('emergencyRescueMsg').textContent = rescue;
+
+    // Video
+    const videoText = localStorage.getItem('emergency_video_text') || 'اضغط تعديل وأضف رابط الفيديو أو الكلام اللي بيأثر فيك';
+    const videoUrl = localStorage.getItem('emergency_video_url') || '';
+    document.getElementById('emergencyVideoMsg').textContent = videoText;
+    if (videoUrl) {
+      document.getElementById('emergencyVideoLink').style.display = 'block';
+      document.getElementById('emergencyVideoHref').href = videoUrl;
+    }
+
+    updateStats();
+  }
+
+  let currentEmergencyField = '';
+
+  function showEmergencyEdit(field) {
+    currentEmergencyField = field;
+    const titles = {
+      rescue: '⚡ جملة الإنقاذ بتاعتك',
+      video: '🎬 مصدر الإنقاذ'
+    };
+    const descs = {
+      rescue: 'الجملة الواحدة اللي بتوقفك في أحلك لحظة — من كلامك أنت',
+      video: 'السطر الأول: الكلام اللي بيأثر فيك\nالسطر التاني: رابط الفيديو (اختياري)'
+    };
+    const vals = {
+      rescue: localStorage.getItem('emergency_rescue') || '',
+      video: (localStorage.getItem('emergency_video_text') || '') + (localStorage.getItem('emergency_video_url') ? '\n' + localStorage.getItem('emergency_video_url') : '')
+    };
+    document.getElementById('emergencyEditTitle').textContent = titles[field];
+    document.getElementById('emergencyEditDesc').textContent = descs[field];
+    document.getElementById('emergencyEditInput').value = vals[field];
+    document.getElementById('emergencyEditModal').classList.add('show');
+    setTimeout(() => document.getElementById('emergencyEditInput').focus(), 100);
+  }
+
+  function saveEmergencyEdit() {
+    const val = document.getElementById('emergencyEditInput').value.trim();
+    if (!val) return;
+    if (currentEmergencyField === 'rescue') {
+      localStorage.setItem('emergency_rescue', val);
+    } else if (currentEmergencyField === 'video') {
+      const lines = val.split('\n').map(l => l.trim()).filter(Boolean);
+      const possibleUrl = lines.find(l => l.startsWith('http'));
+      const text = lines.filter(l => !l.startsWith('http')).join(' ');
+      if (text) localStorage.setItem('emergency_video_text', text);
+      if (possibleUrl) {
+        localStorage.setItem('emergency_video_url', possibleUrl);
+        document.getElementById('emergencyVideoLink').style.display = 'block';
+        document.getElementById('emergencyVideoHref').href = possibleUrl;
+      }
+    }
+    document.getElementById('emergencyEditModal').classList.remove('show');
+    loadEmergencyContent();
+    showToast('✅ تم الحفظ!', 'green');
+  }
+
+  function showSection_emergency_back() {
+    // Go back to tracker
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('section-tracker').classList.add('active');
+    document.querySelector('.nav-tab').classList.add('active');
+  }
+
+  loadEmergencyContent();
+  updateStats();
 </script>
 </body>
 </html>
