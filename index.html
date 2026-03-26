@@ -2630,7 +2630,7 @@
 
   function showAllahName() {
     const today = new Date();
-    const idx = (today.getFullYear() * 366 + today.getMonth() * 31 + today.getDate()) % ALLAH_NAMES.length;
+    const idx = Math.floor(Math.random() * ALLAH_NAMES.length);
     const n = ALLAH_NAMES[idx];
     document.getElementById('allahName').textContent = n.name;
     document.getElementById('allahMeaning').textContent = n.meaning;
