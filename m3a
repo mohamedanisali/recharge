@@ -1,0 +1,2402 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محمد الجديد — رحلة التعافي</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F5F5;
+    --surface: #FFFFFF;
+    --surface2: #EEF2F7;
+    --border: #DDE3ED;
+    --gold: #d4a843;
+    --gold-light: #c8922a;
+    --gold-dim: rgba(212,168,67,0.12);
+    --green: #2e9e5b;
+    --green-dim: #d4f0e2;
+    --red: #e03e3e;
+    --red-dim: #fde8e8;
+    --blue: #2196F3;
+    --teal: #00897B;
+    --text: #333333;
+    --text-dim: #666666;
+    --text-muted: #999999;
+
+    /* Adaptive mood colors */
+    --mood-primary: #4CAF50;
+    --mood-glow: rgba(76,175,80,0.25);
+    --mood-ring: rgba(76,175,80,0.5);
+    --mood-label: #4CAF50;
+  }
+
+  /* === MOOD THEMES === */
+  body.mood-stable {
+    --mood-primary: #4CAF50;
+    --mood-glow: rgba(76,175,80,0.2);
+    --mood-ring: rgba(76,175,80,0.45);
+    --mood-label: #66BB6A;
+  }
+  body.mood-stress {
+    --mood-primary: #2196F3;
+    --mood-glow: rgba(33,150,243,0.2);
+    --mood-ring: rgba(33,150,243,0.45);
+    --mood-label: #42A5F5;
+  }
+  body.mood-relapse {
+    --mood-primary: #7986CB;
+    --mood-glow: rgba(121,134,203,0.15);
+    --mood-ring: rgba(121,134,203,0.35);
+    --mood-label: #9FA8DA;
+  }
+
+  /* Ayah / Quran styles */
+  .ayah-banner {
+    background: linear-gradient(135deg, #fff9ee 0%, #fffdf7 50%, #fff9ee 100%);
+    border-bottom: 1px solid #e8dfc8;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ayah-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(212,168,67,0.1) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .ayah-number {
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    margin-bottom: 1.1rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+  }
+
+  .ayah-text {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.2rem, 3vw, 1.55rem);
+    line-height: 2.1;
+    color: #7a5c1e;
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .ayah-text .highlight {
+    color: #333333;
+    font-weight: 700;
+  }
+
+  .tafseer-toggle {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.78rem;
+    transition: all 0.2s;
+  }
+
+  .tafseer-toggle:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .tafseer-body {
+    display: none;
+    max-width: 680px;
+    margin: 1.25rem auto 0;
+    background: #fffbf0;
+    border: 1px solid rgba(212,168,67,0.3);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    text-align: right;
+  }
+
+  .tafseer-body.open { display: block; }
+
+  .tafseer-title {
+    font-size: 0.72rem;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+    opacity: 0.8;
+  }
+
+  .tafseer-body p {
+    font-size: 0.88rem;
+    line-height: 1.95;
+    color: var(--text-dim);
+  }
+
+  .tafseer-body p strong { color: var(--text); }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Light background — no stars needed */
+  body::before { display: none; }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    padding: 0 2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  .nav-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    gap: 1rem;
+  }
+
+  .nav-logo {
+    font-family: 'Amiri', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+  }
+
+  .nav-tab {
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .nav-tab:hover { color: var(--text); background: var(--surface2); }
+  .nav-tab.active { color: var(--gold); background: rgba(201,168,76,0.1); }
+
+  /* MAIN */
+  main { position: relative; z-index: 1; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* HERO / TRACKER */
+  .hero {
+    text-align: center;
+    padding: 3rem 1.5rem 2rem;
+  }
+
+  .bismillah {
+    font-family: 'Amiri', serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+  }
+
+  .hero-title {
+    font-size: 1.2rem;
+    color: var(--text-dim);
+    font-weight: 300;
+    margin-bottom: 3rem;
+  }
+
+  .counter-ring {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 3px solid var(--mood-primary);
+    margin: 0 auto 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: var(--surface);
+    box-shadow: 0 0 40px var(--mood-glow), 0 4px 20px rgba(0,0,0,0.08);
+    transition: border-color 0.8s ease, box-shadow 0.8s ease;
+  }
+
+  .counter-ring.milestone {
+    border-color: var(--gold);
+    box-shadow: 0 0 60px rgba(212,168,67,0.3), 0 4px 20px rgba(0,0,0,0.08);
+    animation: pulse-gold 2s ease infinite;
+  }
+
+  @keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 0 60px rgba(212,168,67,0.25), 0 4px 20px rgba(0,0,0,0.08); }
+    50% { box-shadow: 0 0 90px rgba(212,168,67,0.45), 0 4px 20px rgba(0,0,0,0.08); }
+  }
+
+  .counter-number {
+    font-size: 4.5rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--mood-label);
+    transition: color 0.8s ease;
+  }
+
+  .counter-label {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+  }
+
+  .milestone-badge {
+    position: absolute;
+    top: -12px;
+    background: var(--gold);
+    color: #0d0f14;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    display: none;
+  }
+
+  .milestone-badge.show { display: block; }
+
+  .start-date-label {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Tracker buttons */
+  .tracker-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+
+  .btn-set { background: var(--gold); color: #0d0f14; }
+  .btn-set:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .btn-relapse {
+    background: transparent;
+    border: 1px solid var(--red-dim);
+    color: var(--red);
+  }
+  .btn-relapse:hover { background: rgba(231,76,60,0.1); }
+
+  /* Milestones */
+  .milestones {
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+  }
+
+  .milestones-title {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .milestones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .milestone-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 0.75rem;
+    text-align: center;
+    transition: all 0.3s;
+    opacity: 0.4;
+  }
+
+  .milestone-item.achieved {
+    opacity: 1;
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.05);
+  }
+
+  .milestone-item .m-days {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--gold);
+  }
+
+  .milestone-item .m-label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-top: 0.2rem;
+  }
+
+  .milestone-item .m-check {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Daily quote */
+  .daily-quote {
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+  }
+
+  .quote-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-right: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .quote-card .q-label {
+    font-size: 0.7rem;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .quote-card .q-text {
+    font-family: 'Amiri', serif;
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: var(--text);
+  }
+
+  /* MORNING REMINDER */
+  .morning-section {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .morning-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .morning-header h2 {
+    font-size: 1.6rem;
+    color: var(--gold);
+    font-family: 'Amiri', serif;
+    margin-bottom: 0.5rem;
+  }
+
+  .morning-header p { color: var(--text-dim); font-size: 0.9rem; }
+
+  .morning-time {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--mood-label);
+    font-variant-numeric: tabular-nums;
+    transition: color 0.8s ease;
+  }
+
+  .morning-date {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .check-item {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .check-item:hover { border-color: var(--gold); background: #fffdf5; }
+
+  .check-item.done {
+    border-color: #a8d5bc;
+    background: #f0faf4;
+  }
+
+  .check-box {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    border: 2px solid #ccd3e0;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+    color: transparent;
+    background: #f5f7fb;
+  }
+
+  .check-item:hover .check-box { border-color: var(--gold); }
+
+  .check-item.done .check-box {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+
+  .check-content .c-title {
+    font-weight: 700;
+    font-size: 0.97rem;
+    color: #333333;
+    margin-bottom: 0.25rem;
+  }
+
+  .check-item.done .check-content .c-title { color: #aab0be; text-decoration: line-through; }
+
+  .check-content .c-desc {
+    font-size: 0.82rem;
+    color: #888888;
+    line-height: 1.65;
+  }
+
+  .check-item.done .check-content .c-desc { color: #c5c8d0; }
+
+  .btn-reset-morning {
+    display: block;
+    margin: 0 auto;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .btn-reset-morning:hover { border-color: var(--text-dim); color: var(--text); }
+
+  /* CONTENT SECTIONS */
+  .content-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .content-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .content-header h2 {
+    font-family: 'Amiri', serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .content-header p { color: var(--text-dim); font-size: 0.9rem; }
+
+  /* Shields */
+  .shield-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+  }
+
+  .shield-header {
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .shield-header:hover { background: var(--surface2); }
+
+  .shield-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .shield-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .shield-icon.green { background: rgba(46,204,113,0.15); }
+  .shield-icon.blue { background: rgba(74,158,255,0.15); }
+  .shield-icon.red { background: rgba(231,76,60,0.15); }
+
+  .shield-title { font-weight: 700; font-size: 0.95rem; }
+  .shield-code { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.1rem; }
+  .shield-arrow { color: var(--text-muted); transition: transform 0.3s; font-size: 0.8rem; }
+  .shield-card.open .shield-arrow { transform: rotate(180deg); }
+
+  .shield-body {
+    display: none;
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .shield-card.open .shield-body { display: block; }
+
+  .shield-step {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .shield-step:last-child { border-bottom: none; }
+
+  .step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-content { font-size: 0.88rem; line-height: 1.7; color: var(--text-dim); }
+  .step-content strong { color: var(--text); }
+
+  .anchor-tag {
+    display: inline-block;
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin: 0.25rem 0;
+  }
+
+  /* Losses */
+  .losses-intro {
+    background: var(--surface);
+    border: 1px solid var(--red-dim);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--text-dim);
+  }
+
+  .loss-category {
+    margin-bottom: 1.5rem;
+  }
+
+  .loss-cat-title {
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .loss-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-right: 3px solid var(--red-dim);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text-dim);
+    transition: transform 0.2s;
+  }
+
+  .loss-item:hover { transform: translateX(-3px); }
+  .loss-item strong { color: var(--text); display: block; margin-bottom: 0.15rem; }
+
+  .commitment-box {
+    background: #f0faf4;
+    border: 1px solid #a8d5bc;
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    margin-top: 2rem;
+    line-height: 1.8;
+    color: #2e7d4f;
+    font-family: 'Amiri', serif;
+    font-size: 1.05rem;
+  }
+
+  /* Hope */
+  .hope-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .hope-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+  .hope-text { font-size: 0.88rem; line-height: 1.7; color: var(--text-dim); }
+  .hope-text strong { color: var(--text); display: block; margin-bottom: 0.15rem; }
+
+  .hope-quote {
+    font-family: 'Amiri', serif;
+    font-size: 0.95rem;
+    color: var(--gold);
+    font-style: italic;
+    margin-top: 0.25rem;
+  }
+
+  /* Plan */
+  .plan-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .plan-card-title {
+    font-weight: 700;
+    color: var(--blue);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+  }
+
+  .plan-ritual {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .plan-ritual:last-child { border-bottom: none; }
+
+  .plan-ritual-title {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+
+  .plan-ritual .label { color: var(--red); font-weight: 700; font-size: 0.8rem; }
+
+  .plan-ritual p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.7; }
+
+  /* Relapse modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .modal-overlay.show { display: flex; }
+
+  .modal {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+
+  .modal h3 {
+    font-family: 'Amiri', serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .modal p {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+  .btn-confirm-relapse {
+    background: rgba(231,76,60,0.15);
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .btn-cancel {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    color: #333333;
+    z-index: 300;
+    transition: transform 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.gold { border-color: var(--gold); color: var(--gold); }
+  .toast.green { border-color: var(--green); color: var(--green); }
+
+  /* Patterns section */
+  .btn-add-pattern {
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--gold);
+    padding: 0.35rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+  .btn-add-pattern:hover { border-color: var(--gold); background: rgba(212,168,67,0.06); }
+
+  .patterns-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .pattern-item {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .pattern-item:hover { border-color: #b0bcd0; }
+  .pattern-item.destruction { border-right: 3px solid #f5b8b8; }
+  .pattern-item.tricks { border-right: 3px solid #b2dfdb; }
+
+  .pattern-item.custom .pattern-badge {
+    font-size: 0.6rem;
+    background: rgba(212,168,67,0.15);
+    color: var(--gold);
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-right: 0.4rem;
+    font-weight: 700;
+  }
+
+  .pattern-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 18px;
+    padding-top: 3px;
+    flex-shrink: 0;
+  }
+
+  .pattern-text {
+    font-size: 0.88rem;
+    color: #555555;
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .pattern-delete {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 2px 5px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: all 0.15s;
+  }
+
+  .pattern-item:hover .pattern-delete { opacity: 1; }
+  .pattern-delete:hover { color: var(--red); background: rgba(240,82,82,0.1); }
+
+  textarea:focus { border-color: var(--gold) !important; }
+
+  /* Mood Selector */
+  .mood-selector {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .mood-label-text {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.05em;
+  }
+  .mood-btns {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .mood-btn {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .mood-stable-btn.active, .mood-stable-btn:hover {
+    border-color: #4CAF50;
+    color: #4CAF50;
+    background: rgba(76,175,80,0.1);
+  }
+  .mood-stress-btn.active, .mood-stress-btn:hover {
+    border-color: #2196F3;
+    color: #2196F3;
+    background: rgba(33,150,243,0.1);
+  }
+  .mood-relapse-btn.active, .mood-relapse-btn:hover {
+    border-color: #9FA8DA;
+    color: #9FA8DA;
+    background: rgba(121,134,203,0.1);
+  }
+
+  /* Morning time 12h */
+  .morning-time-wrapper {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-bottom: 0.25rem;
+  }
+
+  @media (max-width: 600px) {
+    .counter-ring { width: 180px; height: 180px; }
+    .counter-number { font-size: 3.5rem; }
+    nav { padding: 0 1rem; }
+    .nav-tab { font-size: 0.75rem; padding: 0.3rem 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">محمد الجديد</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showSection('tracker')">📊 التقدم</button>
+      <button class="nav-tab" onclick="showSection('morning')">🌅 صباحي</button>
+      <button class="nav-tab" onclick="showSection('tasks')">✅ مهامي</button>
+      <button class="nav-tab" onclick="showSection('shields')">🛡 الدروع</button>
+      <button class="nav-tab" onclick="showSection('patterns')">🧠 الأنماط</button>
+      <button class="nav-tab" onclick="showSection('losses')">📜 الخسائر</button>
+      <button class="nav-tab" onclick="showSection('hope')">💛 الأمل</button>
+      <button class="nav-tab" onclick="showSection('plan')">📋 الخطة</button>
+      <button class="nav-tab" onclick="showSection('library')">📚 المكتبة</button>
+    </div>
+  </div>
+</nav>
+
+<!-- AYAH BANNER — always visible -->
+<div class="ayah-banner">
+  <div class="ayah-number">سورة البقرة — الآية ٢٦٨</div>
+  <div class="ayah-text">
+    <span class="highlight">الشَّيْطَانُ يَعِدُكُمُ الْفَقْرَ</span> وَيَأْمُرُكُم بِالْفَحْشَاءِ ۖ
+    وَ<span class="highlight">اللَّهُ يَعِدُكُم مَّغْفِرَةً مِّنْهُ وَفَضْلًا</span> ۗ
+    وَاللَّهُ وَاسِعٌ عَلِيمٌ
+  </div>
+  <button class="tafseer-toggle" onclick="toggleTafseer(this)">📖 تفسير الطبري</button>
+  <div class="tafseer-body">
+    <div class="tafseer-title">قال أبو جعفر الطبري — رحمه الله</div>
+    <p>
+      يعني تعالى ذكره: <strong>الشيطان يعدكم</strong> أيها الناس — بالصدقة وأدائكم الزكاة الواجبة في أموالكم — أن تفتقروا.
+      <strong>ويأمركم بالفحشاء</strong>: أي بمعاصي الله عز وجل، وترك طاعته.
+      <br><br>
+      <strong>والله يعدكم مغفرة منه</strong>: يعني أن الله عز وجل يعدكم أيها المؤمنون أن يستر عليكم فحشاءكم،
+      بصفحه لكم عن عقوبتكم عليها، فيغفر لكم ذنوبكم بالصدقة التي تتصدقون.
+      <strong>وفضلاً</strong>: ويعدكم أن يخلف عليكم من صدقتكم، فيتفضل عليكم من عطاياه ويسبغ عليكم في أرزاقكم.
+    </p>
+  </div>
+</div>
+
+<main>
+
+  <!-- TRACKER -->
+  <div id="section-tracker" class="section active">
+    <div class="hero">
+      <div class="bismillah">لا حول ولا قوة إلا بالله</div>
+      <div class="hero-title">رحلتك نحو الحرية — يوم بيوم</div>
+
+      <div class="counter-ring" id="counterRing">
+        <div class="milestone-badge" id="milestoneBadge">🏆</div>
+        <div class="counter-number" id="dayCount">0</div>
+        <div class="counter-label">يوم من الثبات</div>
+      </div>
+
+      <div class="start-date-label" id="startDateLabel">اضغط "ابدأ من النهارده" لتسجيل يوم البداية</div>
+
+      <div class="tracker-btns">
+        <button class="btn btn-set" onclick="setStartDate()">📅 ابدأ من النهارده</button>
+        <button class="btn btn-relapse" onclick="showRelapseModal()">↩ انتكسة</button>
+      </div>
+
+      <!-- Mood Selector -->
+      <div class="mood-selector">
+        <div class="mood-label-text">حالتك دلوقتي؟</div>
+        <div class="mood-btns">
+          <button class="mood-btn mood-stable-btn active" onclick="setMood('stable', this)" title="مستقر ومرتاح">
+            🌿 مستقر
+          </button>
+          <button class="mood-btn mood-stress-btn" onclick="setMood('stress', this)" title="ضغط عالي">
+            🌊 ضغط
+          </button>
+          <button class="mood-btn mood-relapse-btn" onclick="setMood('relapse', this)" title="بعد انتكسة">
+            🕊 تعافي
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="milestones">
+      <div class="milestones-title">محطات الطريق</div>
+      <div class="milestones-grid">
+        <div class="milestone-item" id="m1">
+          <div class="m-check">⚪</div>
+          <div class="m-days">1</div>
+          <div class="m-label">أول خطوة</div>
+        </div>
+        <div class="milestone-item" id="m7">
+          <div class="m-check">⚪</div>
+          <div class="m-days">7</div>
+          <div class="m-label">أسبوع</div>
+        </div>
+        <div class="milestone-item" id="m30">
+          <div class="m-check">⚪</div>
+          <div class="m-days">30</div>
+          <div class="m-label">شهر</div>
+        </div>
+        <div class="milestone-item" id="m90">
+          <div class="m-check">⚪</div>
+          <div class="m-days">90</div>
+          <div class="m-label">ثلاثة أشهر</div>
+        </div>
+        <div class="milestone-item" id="m180">
+          <div class="m-check">⚪</div>
+          <div class="m-days">180</div>
+          <div class="m-label">نصف سنة</div>
+        </div>
+        <div class="milestone-item" id="m365">
+          <div class="m-check">⚪</div>
+          <div class="m-days">365</div>
+          <div class="m-label">سنة كاملة</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="daily-quote">
+      <div class="quote-card">
+        <div class="q-label">💛 تذكر دايمًا</div>
+        <div class="q-text" id="dailyQuote">جارٍ التحميل...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MORNING -->
+  <div id="section-morning" class="section">
+    <div class="morning-section">
+      <div class="morning-header">
+        <h2>🌅 جرعة الصباح</h2>
+        <p>افتحها أول ما تصحى — قبل أي حاجة تانية</p>
+      </div>
+
+      <div class="morning-time-wrapper">
+        <div class="morning-time" id="clockDisplay">00:00</div>
+        <div style="font-size:1.2rem;font-weight:700;color:var(--mood-label);transition:color 0.8s;" id="clockAmPm">ص</div>
+      </div>
+      <div class="morning-date" id="dateDisplay">—</div>
+
+      <div class="checklist" id="morningChecklist">
+        <div class="check-item" onclick="toggleCheck(this)" data-key="m1">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">اقرأ "دوافع الأمل"</div>
+            <div class="c-desc">روح على تبويب الأمل واقرأ سبب قتالك — ده وقودك لليوم</div>
+          </div>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)" data-key="m2">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">راجع خطة الحماية</div>
+            <div class="c-desc">روح على "الخطة" وتأكد إنك عارف خطوط الخطر النهارده</div>
+          </div>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)" data-key="m3">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">تمرين الدروع (5 دقايق)</div>
+            <div class="c-desc">افتح "الدروع" وراجع البروتوكول — تخيل نفسك بتطبقه بسرعة</div>
+          </div>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)" data-key="m4">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">نية الصلاة</div>
+            <div class="c-desc">قبل ما تكبر قول: "أنا مش داخل صفقة — أنا داخل أقابل اللي بيحبني"</div>
+          </div>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)" data-key="m5">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">دعاء الصدق</div>
+            <div class="c-desc">قول: "يا رب، أنا النهارده حاسس بـ [...]. بطلب تشفي قلبي."</div>
+          </div>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)" data-key="m6">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">تأهب الحذاء (درع غض البصر)</div>
+            <div class="c-desc">لما تلبس حذاؤك: "الأرض! جماد! إثبات صدق توبتي"</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-reset-morning" onclick="resetMorning()">🔄 إعادة تعيين الشيك ليست</button>
+    </div>
+  </div>
+
+  <!-- SHIELDS -->
+  <div id="section-shields" class="section">
+    <div class="content-section">
+      <div class="content-header">
+        <h2>🛡 نظام الدروع الذهنية</h2>
+        <p>اضغط على أي درع لتفتح بروتوكوله الكامل</p>
+        <button class="btn-add-pattern" onclick="showShieldModal()" style="margin-top:1rem;">＋ أضف درع جديد</button>
+      </div>
+
+      <!-- Shield 0 -->
+      <div class="shield-card" onclick="toggleShield(this)">
+        <div class="shield-header">
+          <div class="shield-header-left">
+            <div class="shield-icon green">👁</div>
+            <div>
+              <div class="shield-title">الدرع الوقائي (0): غض البصر الواعي</div>
+              <div class="shield-code">كلمة السر: <strong>"الأرض!"</strong> | المرساة: الحذاء/الشبشب</div>
+            </div>
+          </div>
+          <div class="shield-arrow">▼</div>
+        </div>
+        <div class="shield-body">
+          <div class="shield-step">
+            <div class="step-num">1</div>
+            <div class="step-content"><strong>الوعي بالمسح:</strong> أعرف أن المسح البصري طبيعي، ومهمتي هي وضع علامة "خطر" على ما لا يحل لي.</div>
+          </div>
+          <div class="shield-step">
+            <div class="step-num">2</div>
+            <div class="step-content"><strong>قاعدة الثانية الواحدة:</strong> إذا وقع البصر، لدي ثانية واحدة لتطبيق الأمر: <strong>"الأرض! جماد!"</strong></div>
+          </div>
+          <div class="shield-step">
+            <div class="step-num">3</div>
+            <div class="step-content"><strong>الربط بالصدق:</strong> غض البصر هو إثبات عملي لصدق توبتي. النظرة الثانية هي أول خطوة للعودة للوحل.</div>
+          </div>
+          <div class="shield-step">
+            <div class="step-num">🔑</div>
+            <div class="step-content">المرساة: <span class="anchor-tag">الحذاء/الشبشب</span> — عند ارتدائه، تتأهب.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shield 1 -->
+      <div class="shield-card" onclick="toggleShield(this)">
+        <div class="shield-header">
+          <div class="shield-header-left">
+            <div class="shield-icon blue">🎬</div>
+            <div>
+              <div class="shield-title">الدرع العلاجي (1): البطل الواعي</div>
+              <div class="shield-code">كلمة السر: <strong>"فيلم البطل"</strong> | المرساة: السبحة</div>
+            </div>
+          </div>
+          <div class="shield-arrow">▼</div>
+        </div>
+        <div class="shield-body">
+          <div class="shield-step">
+            <div class="step-num">1</div>
+            <div class="step-content"><strong>"قف!"</strong> — أتوقف وأتعرف على الخيال بوعي: "هذا هو فيلم البطل".</div>
+          </div>
+          <div class="shield-step">
+            <div class="step-num">2</div>
+            <div class="step-content"><strong>"ليه؟"</strong> — أحلل الدافع: "ما هو الشعور الذي أبحث عنه؟ تقدير؟ قوة؟"</div>
+          </div>
+          <div class="shield-step">
+            <div class="step-num">3</div>
+            <div class="step-content"><strong>"إزاي؟"</strong> — أبحث عن البديل الحقيقي: "ما هو أصغر فعل واقعي متاح الآن؟"</div>
+          </div>
+          <div class="shield-step">
+            <div class="step-num">🔑</div>
+            <div class="step-content">المرساة: <span class="anchor-tag">السبحة</span> — عند لمسها: "هل هذا وقت الخيال أم وقت الذكر والفعل الحقيقي؟"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shield 2 -->
+      <div class="shield-card" onclick="toggleShield(this)">
+        <div class="shield-header">
+          <div class="shield-header-left">
+            <div class="shield-icon red">🚨</div>
+            <div>
+              <div class="shield-title">درع الطوارئ (2): قاطع الشهوة</div>
+              <div class="shield-code">كلمة السر: <strong>"إنذار أحمر"</strong> | المرساة: السرير / كف اليد</div>
+            </div>
+          </div>
+          <div class="shield-arrow">▼</div>
+        </div>
+        <div class="shield-body">
+          <div class="shield-step">
+            <div class="step-num">1</div>
+            <div class="step-content"><strong>"حركة!"</strong> — تغيير جسدي فوري وحاسم. أقوم من مكاني، أخرج من الغرفة.</div>
+          </div>
+          <div class="shield-step">
+            <div class="step-num">2</div>
+            <div class="step-content"><strong>"ميه!"</strong> — صدمة حسية لإعادة الضبط. أغسل وجهي ورقبتي بماء بارد.</div>
+          </div>
+          <div class="shield-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>"صوت + إنسانية + اشمئزاز"</strong> (سلسلة سريعة واحدة):<br>
+              • <strong>صوت:</strong> "أعوذ بالله من الشيطان الرجيم."<br>
+              • <strong>إنسانية:</strong> "هذه إنسانة محترمة لها أهل وحياة."<br>
+              • <strong>اشمئزاز:</strong> "هذا خيانة لله في نعمة عيني وعقلي. الله يراني الآن."
+            </div>
+          </div>
+          <div class="shield-step">
+            <div class="step-num">🔑</div>
+            <div class="step-content">المرسيات: <span class="anchor-tag">السرير</span> (مكان للراحة لا للخيانة) + <span class="anchor-tag">كف اليد</span> (تذكير بالنعمة)</div>
+          </div>
+        </div>
+      </div>
+      <div id="customShieldsList"></div>
+    </div>
+  </div>
+  <div id="section-losses" class="section">
+    <div class="content-section">
+      <div class="content-header">
+        <h2>📜 وثيقة إعلان حرب</h2>
+        <p>اقرأها لما تحس بالضعف — تذكر التكلفة الحقيقية</p>
+        <button class="btn-add-pattern" onclick="showLossModal()" style="margin-top:1rem;">＋ أضف خسارة</button>
+      </div>
+
+      <div class="losses-intro">
+        أنا، "محمد"، أُقر إقرارًا كاملاً بكامل قواي العقلية، أن استسلامي لشهوتي وإدماني قد كلفني ما يلي:
+      </div>
+
+      <div class="loss-category">
+        <div class="loss-cat-title">🕌 أولاً: خسائر روحانية</div>
+        <div class="loss-item"><strong>انتهاك حرمة رمضان</strong>الإفطار العمد في نهار رمضان — من أكبر الكبائر.</div>
+        <div class="loss-item"><strong>هبوط الخشوع</strong>فقدت لذة الصلاة، وتحولت وقفتي بين يدي الله إلى مجرد حركات جسدية.</div>
+        <div class="loss-item"><strong>هجران بيوت الله</strong>فوّتت صلاة الجماعة وحرمت نفسي من نور التراويح.</div>
+        <div class="loss-item"><strong>جفاف اللسان والقلب</strong>عجزت عن الدعاء، وشعرت بحاجز بيني وبين ربي.</div>
+      </div>
+
+      <div class="loss-category">
+        <div class="loss-cat-title">🧠 ثانياً: خسائر نفسية</div>
+        <div class="loss-item"><strong>كراهية الذات</strong>وصلت إلى أسوأ نسخة من نفسي، وكرهت الشخص الذي أراه في المرآة.</div>
+        <div class="loss-item"><strong>فقدان الثقة بالنفس</strong>تحولت إلى شخص عاجز، يؤجل، ويهرب، ويخلف وعوده.</div>
+        <div class="loss-item"><strong>العصبية والغضب</strong>أصبحت بركانًا جاهزًا للانفجار في أي لحظة.</div>
+      </div>
+
+      <div class="loss-category">
+        <div class="loss-cat-title">👥 ثالثاً: خسائر اجتماعية</div>
+        <div class="loss-item"><strong>جرح كرامة الأم</strong>تسببت في إيذاء أقرب إنسانة لي.</div>
+        <div class="loss-item"><strong>تدمير علاقة مهمة</strong>خسرت من كنت أرجوها زوجة بسبب هذا الإدمان.</div>
+      </div>
+
+      <div class="loss-category">
+        <div class="loss-cat-title">📚 رابعاً: خسائر مادية وأكاديمية</div>
+        <div class="loss-item"><strong>الانهيار الأكاديمي</strong>أهملت الدراسة وتغيبت، معرضًا مستقبلي للخطر.</div>
+        <div class="loss-item"><strong>الانهيار المهني</strong>أهملت العمل ومصدر الرزق.</div>
+        <div class="loss-item"><strong>إرهاق جسدي دائم</strong>عشت في حالة هبوط مزمن شلّ قدرتي على الإنجاز.</div>
+      </div>
+
+      <div id="customLossesList"></div>
+
+      <div class="commitment-box">
+        أتعهد أمام الله، ثم أمام نفسي — هذه الوثيقة ستكون آخر "جرد للخسائر".<br>
+        من اليوم، سأبدأ في كتابة <strong>"سجل الأرباح"</strong>. كل يوم ثبات هو ربح.
+      </div>
+    </div>
+  </div>
+
+  <!-- HOPE -->
+  <div id="section-hope" class="section">
+    <div class="content-section">
+      <div class="content-header">
+        <h2>💛 لماذا أقاتل؟</h2>
+        <p>اقرأ هذا الجزء كل صباح — هذا وقودك</p>
+        <button class="btn-add-pattern" onclick="showHopeModal()" style="margin-top:1rem;">＋ أضف دافع جديد</button>
+      </div>
+
+      <div class="hope-item">
+        <div class="hope-icon">🤲</div>
+        <div class="hope-text">
+          <strong>رضا الله</strong>
+          <div class="hope-quote">"والله العظيم ما عاوز غير كده... بحبك ومش عاوز غير رضاك والله."</div>
+        </div>
+      </div>
+
+      <div class="hope-item">
+        <div class="hope-icon">👨‍👩‍👦</div>
+        <div class="hope-text">
+          <strong>رد الجميل للأهل</strong>
+          <div class="hope-quote">"اهلي يستحقوا أحسن من كده... أردلهم بس جزء من جمايلهم عليا."</div>
+        </div>
+      </div>
+
+      <div class="hope-item">
+        <div class="hope-icon">✨</div>
+        <div class="hope-text">
+          <strong>استعادة الذات النقية</strong>
+          <div class="hope-quote">"أنا مش وسخ كده — أنا كنت نضيف. يارب نضفني وطهرني."</div>
+        </div>
+      </div>
+
+      <div class="hope-item">
+        <div class="hope-icon">👶</div>
+        <div class="hope-text">
+          <strong>المسؤولية تجاه المستقبل</strong>
+          <div class="hope-quote">"زوجتي وولادي ما يستحقوش أب كده أبدا."</div>
+        </div>
+      </div>
+
+      <div class="hope-item">
+        <div class="hope-icon">🕊</div>
+        <div class="hope-text">
+          <strong>الحرية</strong>
+          <div class="hope-quote">"عاوز أبقى حر — مش عاوزها تتحكم فيا."</div>
+        </div>
+      </div>
+
+      <div class="hope-item">
+        <div class="hope-icon">💑</div>
+        <div class="hope-text">
+          <strong>الأمل في علاقة صالحة</strong>
+          <div class="hope-quote">"عاوز ربنا يكرمني بزوجة حنينة — ندخل الجنة سوا."</div>
+        </div>
+      </div>
+
+      <div class="hope-item">
+        <div class="hope-icon">🌱</div>
+        <div class="hope-text">
+          <strong>النفع الصادق</strong>
+          <div class="hope-quote">"عاوز أفيد الناس بنية صافية — مش مشوه بنقص."</div>
+        </div>
+      </div>
+
+      <div id="customHopesList"></div>
+    </div>
+  </div>
+
+  <!-- PLAN -->
+  <div id="section-plan" class="section">
+    <div class="content-section">
+      <div class="content-header">
+        <h2>📋 خطة العمل الكاملة</h2>
+        <p>خطوة بخطوة — يوم بيوم — لبناء حياة جديدة</p>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-card-title">🔍 خطة (1): مواجهة الواقع وكسر اللوب</div>
+
+        <div class="plan-ritual">
+          <div class="plan-ritual-title">1. جرعة الواقع الصباحية (يوميًا)</div>
+          <p><span class="label">المهمة: </span>أول حاجة الصبح — اقرأ ملخص "الخسائر" عشان تتذكر ليه بتحارب وإيه تمن الرجوع.</p>
+        </div>
+
+        <div class="plan-ritual">
+          <div class="plan-ritual-title">2. كشف الحلقة (لحظة الهروب)</div>
+          <p><span class="label">المهمة: </span>لما تحس إنك عاوز تهرب، اسأل نفسك بصوت عالي: "أنا بهرب من إحساس إيه دلوقتي؟ خزي؟ نقص؟ خوف؟" — مجرد تسمية الإحساس بيضعفه.</p>
+        </div>
+
+        <div class="plan-ritual">
+          <div class="plan-ritual-title">3. تمرين القبول المصغر</div>
+          <p><span class="label">المهمة: </span>لما تلاقي نفسك بتنتقد نفسك — حط إيدك على قلبك وقول: "رغم الإحساس ده، أنا بختار أقبل نفسي دلوقتي زي ما أنا."</p>
+        </div>
+
+        <div class="plan-ritual">
+          <div class="plan-ritual-title">4. مراجعة دافع الأمل (أسبوعيًا)</div>
+          <p><span class="label">المهمة: </span>آخر كل أسبوع، اقرأ "دوافع الأمل" واسأل نفسك: "إيه اللي عملته الأسبوع ده خدم واحد من الدوافع دي؟"</p>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-card-title">🕌 خطة (2): بناء علاقة روحية حقيقية</div>
+
+        <div class="plan-ritual">
+          <div class="plan-ritual-title">1. تغيير النية (قبل كل صلاة)</div>
+          <p><span class="label">المهمة: </span>قبل ما تكبر: "أنا مش داخل صفقة — أنا داخل أقابل اللي بيحبني عشان أشكره وأكون معاه."</p>
+        </div>
+
+        <div class="plan-ritual">
+          <div class="plan-ritual-title">2. دعاء الصدق والشفاء (آخر اليوم)</div>
+          <p><span class="label">المهمة: </span>"يا رب، أنا النهارده حسيت بـ [خزي/نقص]. مش بطلب تغير ظروفي — بطلب تشفي قلبي."</p>
+        </div>
+
+        <div class="plan-ritual">
+          <div class="plan-ritual-title">3. صيد الأدلة (قبل النوم)</div>
+          <p><span class="label">المهمة: </span>اكتب في كشكول: "شفت كرم ربنا أو رحمته أو هدايته في إيه النهارده؟"</p>
+        </div>
+
+        <div class="plan-ritual">
+          <div class="plan-ritual-title">4. مواجهة الاستياء (أسبوعيًا)</div>
+          <p><span class="label">المهمة: </span>اختار استياء واحد وقول: "يا رب، أنا حاسس بالظلم في موضوع [كذا] — بسلم لك الإحساس ده."</p>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-card-title">🛡 خطة الحماية — مواطن الخطر وبدائلها</div>
+
+        <div class="plan-ritual">
+          <div class="plan-ritual-title">⚠️ أشخاص خطر</div>
+          <p>الأصدقاء القدامى، البنات كمثير، الحساسية تجاه الأصدقاء الحاليين.<br>
+          <strong>البديل:</strong> الصحبة الآمنة، مجموعات الدعم، غض البصر.</p>
+        </div>
+
+        <div class="plan-ritual">
+          <div class="plan-ritual-title">⚠️ أماكن خطر</div>
+          <p>الشارع عند إطلاق البصر — المنزل بعد العودة بمثيرات.<br>
+          <strong>البديل:</strong> المشي بهدف، اليقظة الذهنية، روتين صحي عند العودة (صلاة + رياضة).</p>
+        </div>
+
+        <div class="plan-ritual">
+          <div class="plan-ritual-title">⚠️ أشياء خطر</div>
+          <p>الهاتف الذكي — اللابتوب غير المحمي — وقت الفراغ.<br>
+          <strong>البديل: ✅ تم بنجاح</strong> — الهاتف بأزرار، اللابتوب محصّن بـ Cold Turkey، جدول يومي.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATTERNS -->
+  <div id="section-patterns" class="section">
+    <div class="content-section">
+      <div class="content-header">
+        <h2>🧠 الأنماط والخدع</h2>
+        <p>اعرف العدو من جوا — وشوف خدع الشيطان اللي بتنكشف عليك</p>
+      </div>
+
+      <!-- Self-Destruction Patterns -->
+      <div style="margin-bottom:2.5rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+          <div style="font-weight:700;color:var(--red);font-size:1rem;">💣 أنماط التدمير الذاتي</div>
+          <button class="btn-add-pattern" onclick="showAddModal('destruction')">＋ أضف نمط</button>
+        </div>
+        <div class="patterns-list" id="destruction-list"></div>
+      </div>
+
+      <!-- Satan's Tricks -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+          <div style="font-weight:700;color:var(--teal);font-size:1rem;">😈 خدع الشيطان</div>
+          <button class="btn-add-pattern" onclick="showAddModal('tricks')">＋ أضف خدعة</button>
+        </div>
+        <div class="patterns-list" id="tricks-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY TASKS -->
+  <div id="section-tasks" class="section">
+    <div class="content-section">
+      <div class="content-header">
+        <h2>✅ مهامي اليومية</h2>
+        <p>مهام منتزعة من خطتك — شيّك عليها كل يوم</p>
+      </div>
+
+      <!-- Progress bar -->
+      <div style="background:#EEF2F7;border-radius:20px;height:10px;margin-bottom:0.5rem;overflow:hidden;">
+        <div id="tasksProgressBar" style="height:100%;background:var(--mood-primary);border-radius:20px;transition:width 0.4s ease;width:0%"></div>
+      </div>
+      <div style="text-align:center;font-size:0.8rem;color:var(--text-muted);margin-bottom:2rem;" id="tasksProgressLabel">0 من 0 مهمة</div>
+
+      <!-- Fixed tasks from plan -->
+      <div style="font-weight:700;color:var(--text-dim);font-size:0.78rem;letter-spacing:0.08em;margin-bottom:0.75rem;text-transform:uppercase;">📌 مهام ثابتة من الخطة</div>
+      <div class="checklist" id="fixedTasksList">
+        <div class="check-item task-item" onclick="toggleTask(this,'ft1')" data-key="ft1">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">جرعة الواقع الصباحية</div>
+            <div class="c-desc">اقرأ ملخص الخسائر أول الصبح — تذكر ليه بتحارب</div>
+          </div>
+        </div>
+        <div class="check-item task-item" onclick="toggleTask(this,'ft2')" data-key="ft2">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">تغيير النية قبل الصلاة</div>
+            <div class="c-desc">قبل ما تكبر: "أنا مش داخل صفقة — أنا داخل أقابل اللي بيحبني"</div>
+          </div>
+        </div>
+        <div class="check-item task-item" onclick="toggleTask(this,'ft3')" data-key="ft3">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">دعاء الصدق والشفاء آخر اليوم</div>
+            <div class="c-desc">"يا رب، أنا النهارده حسيت بـ [...]. بطلب تشفي قلبي."</div>
+          </div>
+        </div>
+        <div class="check-item task-item" onclick="toggleTask(this,'ft4')" data-key="ft4">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">صيد الأدلة قبل النوم</div>
+            <div class="c-desc">اكتب في كشكول: "شفت كرم ربنا أو رحمته في إيه النهارده؟"</div>
+          </div>
+        </div>
+        <div class="check-item task-item" onclick="toggleTask(this,'ft5')" data-key="ft5">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">تمرين القبول المصغر</div>
+            <div class="c-desc">لما تنتقد نفسك: حط إيدك على قلبك وقول "بختار أقبل نفسي دلوقتي"</div>
+          </div>
+        </div>
+        <div class="check-item task-item" onclick="toggleTask(this,'ft6')" data-key="ft6">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">كشف الحلقة (لحظة الهروب)</div>
+            <div class="c-desc">لما تحس بالهروب: "بهرب من إحساس إيه دلوقتي؟ خزي؟ نقص؟ خوف؟"</div>
+          </div>
+        </div>
+        <div class="check-item task-item" onclick="toggleTask(this,'ft7')" data-key="ft7">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">رياضة أو حركة جسدية</div>
+            <div class="c-desc">جسمك جزء من خطة الحماية — حرّكه يوميًا ولو 15 دقيقة</div>
+          </div>
+        </div>
+        <div class="check-item task-item" onclick="toggleTask(this,'ft8')" data-key="ft8">
+          <div class="check-box">✓</div>
+          <div class="check-content">
+            <div class="c-title">تطبيق درع غض البصر</div>
+            <div class="c-desc">لبست حذاؤك؟ تأهب. "الأرض! جماد! إثبات صدق توبتي"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom tasks -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:2rem;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">
+        <div style="font-weight:700;color:var(--text-dim);font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;">➕ مهام أضفتها</div>
+        <button class="btn-add-pattern" onclick="showTaskModal()">＋ أضف مهمة</button>
+      </div>
+      <div class="checklist" id="customTasksList"></div>
+
+      <button class="btn-reset-morning" onclick="resetTasks()" style="margin-top:1.5rem;">🔄 إعادة تعيين كل المهام</button>
+    </div>
+  </div>
+
+  <!-- LIBRARY -->
+  <div id="section-library" class="section">
+    <div class="content-section">
+      <div class="content-header">
+        <h2>📚 المكتبة العلمية</h2>
+        <p>ملخصاتك من الفيديوهات والمصادر — ترجعلها وقت ما تحتاج</p>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1.5rem;">
+        <button class="btn btn-set" onclick="showLibraryModal()" style="font-size:0.85rem;padding:0.5rem 1.2rem;">＋ أضف مصدر جديد</button>
+      </div>
+
+      <div id="libraryList"></div>
+
+      <div id="libraryEmpty" style="text-align:center;padding:3rem 1rem;color:var(--text-muted);">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">📖</div>
+        <div style="font-size:0.95rem;">لسه ما أضفتش مصادر<br>ابدأ بأول فيديو أو كتاب استفدت منه</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Add Pattern Modal -->
+<div class="modal-overlay" id="addPatternModal">
+  <div class="modal" style="text-align:right;">
+    <h3 id="addModalTitle">إضافة نمط جديد</h3>
+    <p style="margin-bottom:0.75rem;font-size:0.85rem;">اكتب النمط أو الخدعة اللي لاحظتها على نفسك</p>
+    <textarea id="patternInput" placeholder="مثلاً: لما أحس بالوحدة أهرب للهاتف..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.75rem;color:#333333;font-family:'Cairo',sans-serif;font-size:0.9rem;min-height:90px;resize:vertical;outline:none;direction:rtl;"></textarea>
+    <div class="modal-btns" style="margin-top:1rem;">
+      <button class="btn-set btn" onclick="savePattern()">حفظ</button>
+      <button class="btn-cancel" onclick="closeAddModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="relapseModal">
+  <div class="modal">
+    <h3>لحظة صدق</h3>
+    <p>
+      انتكسة ≠ فشل.<br>
+      الفشل الحقيقي هو إنك تقف وما تقومش.<br><br>
+      أنت أكبر من هذه اللحظة.<br>
+      كل يوم عدى كان ربح حقيقي — مش بيتمسح.
+    </p>
+    <div class="modal-btns">
+      <button class="btn-confirm-relapse" onclick="confirmRelapse()">نعم، أعد العداد من الصفر</button>
+      <button class="btn-cancel" onclick="closeRelapseModal()">رجوع</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ALLAH NAME MODAL (shown on load) -->
+<div class="modal-overlay" id="allahModal">
+  <div class="modal" style="max-width:520px;">
+    <div style="font-size:0.72rem;color:var(--gold);font-weight:700;letter-spacing:0.1em;margin-bottom:0.5rem;">✨ اسم الله اليوم</div>
+    <div id="allahName" style="font-family:'Amiri',serif;font-size:2.2rem;color:var(--gold);margin-bottom:0.25rem;"></div>
+    <div id="allahMeaning" style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.25rem;"></div>
+    <div id="allahExplain" style="font-family:'Amiri',serif;font-size:1rem;line-height:1.9;color:var(--text-dim);text-align:right;background:#fffdf5;border:1px solid #e8dfc8;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem;"></div>
+    <button class="btn btn-set" onclick="closeAllahModal()" style="width:100%;">بسم الله — أبدأ يومي 🌿</button>
+  </div>
+</div>
+
+<!-- ADD TASK MODAL -->
+<div class="modal-overlay" id="addTaskModal">
+  <div class="modal" style="text-align:right;">
+    <h3>➕ إضافة مهمة يومية</h3>
+    <p style="margin-bottom:0.75rem;font-size:0.85rem;">اكتب المهمة اللي عايز تضيفها ليومك</p>
+    <input id="taskTitleInput" placeholder="عنوان المهمة..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.9rem;outline:none;direction:rtl;margin-bottom:0.5rem;">
+    <textarea id="taskDescInput" placeholder="وصف اختياري..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;min-height:70px;resize:vertical;outline:none;direction:rtl;"></textarea>
+    <div class="modal-btns" style="margin-top:1rem;">
+      <button class="btn btn-set" onclick="saveTask()">حفظ</button>
+      <button class="btn-cancel" onclick="closeTaskModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD LIBRARY MODAL -->
+<div class="modal-overlay" id="addLibraryModal">
+  <div class="modal" style="text-align:right;max-width:580px;">
+    <h3>📚 إضافة مصدر جديد</h3>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1rem;">
+      <input id="libTitleInput" placeholder="عنوان الفيديو أو الكتاب..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.9rem;outline:none;direction:rtl;">
+      <input id="libAuthorInput" placeholder="الشيخ / المؤلف (مثلاً: عماد رشاد عثمان)" style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;outline:none;direction:rtl;">
+      <input id="libUrlInput" placeholder="رابط الفيديو (اختياري)" style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;outline:none;direction:ltr;">
+      <textarea id="libSummaryInput" placeholder="الملخص — أهم ما فهمته..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;min-height:80px;resize:vertical;outline:none;direction:rtl;"></textarea>
+      <textarea id="libPointsInput" placeholder="أهم النقاط (كل نقطة في سطر)..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;min-height:100px;resize:vertical;outline:none;direction:rtl;"></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-set" onclick="saveLibraryItem()">حفظ المصدر</button>
+      <button class="btn-cancel" onclick="closeLibraryModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD SHIELD MODAL -->
+<div class="modal-overlay" id="addShieldModal">
+  <div class="modal" style="text-align:right;max-width:540px;">
+    <h3>🛡 إضافة درع جديد</h3>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1rem;">
+      <input id="shieldTitleInput" placeholder="اسم الدرع..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.9rem;outline:none;direction:rtl;">
+      <input id="shieldKeywordInput" placeholder='كلمة السر (مثلاً: "قف!")' style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;outline:none;direction:rtl;">
+      <textarea id="shieldStepsInput" placeholder="خطوات الدرع (كل خطوة في سطر جديد)..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;min-height:110px;resize:vertical;outline:none;direction:rtl;"></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-set" onclick="saveShield()">حفظ الدرع</button>
+      <button class="btn-cancel" onclick="closeShieldModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD HOPE MODAL -->
+<div class="modal-overlay" id="addHopeModal">
+  <div class="modal" style="text-align:right;">
+    <h3>💛 إضافة دافع أمل</h3>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1rem;">
+      <input id="hopeTitleInput" placeholder="عنوان الدافع (مثلاً: حب ربنا)" style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.9rem;outline:none;direction:rtl;">
+      <input id="hopeIconInput" placeholder="إيموجي (مثلاً: 🌟)" style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.9rem;outline:none;direction:rtl;">
+      <textarea id="hopeQuoteInput" placeholder='اكتب كلامك بلسانك... (مثلاً: "عاوز أبقى حر")' style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;min-height:80px;resize:vertical;outline:none;direction:rtl;"></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-set" onclick="saveHope()">حفظ</button>
+      <button class="btn-cancel" onclick="closeHopeModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD LOSS MODAL -->
+<div class="modal-overlay" id="addLossModal">
+  <div class="modal" style="text-align:right;">
+    <h3>📜 إضافة خسارة</h3>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1rem;">
+      <input id="lossCatInput" placeholder='التصنيف (مثلاً: "روحانية" أو "نفسية")' style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.9rem;outline:none;direction:rtl;">
+      <input id="lossTitleInput" placeholder="عنوان الخسارة..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.9rem;outline:none;direction:rtl;">
+      <textarea id="lossDescInput" placeholder="اشرح بتفصيل..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;min-height:80px;resize:vertical;outline:none;direction:rtl;"></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-set" onclick="saveLoss()">حفظ</button>
+      <button class="btn-cancel" onclick="closeLossModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const QUOTES = [
+    "كل يوم ثبات هو ربح. اليوم ده إنت ربحت.",
+    "\"أنا مش وسخ كده — أنا كنت نضيف. يارب نضفني.\"",
+    "الحرية مش غياب الرغبة — الحرية إنك تختار أكبر منها.",
+    "الفشل الحقيقي هو إنك تقف وما تقومش.",
+    "\"والله العظيم ما عاوز غير رضاك.\"",
+    "كل درع بتتمرن عليه — بيصبح أسرع في اللحظة الحقيقية.",
+    "\"عاوز أبقى حر — مش عاوزها تتحكم فيا.\"",
+    "اليوم ده — خطوة واحدة للأمام. بس كده.",
+    "السبحة في إيدك — هل ده وقت الذكر أم وقت الخيال؟",
+    "\"زوجتي وولادي ما يستحقوش أب كده.\" — تذكر مين بتحارب عشانه.",
+  ];
+
+  // SECTION NAVIGATION
+  function showSection(name) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('section-' + name).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  // TAFSEER TOGGLE
+  function toggleTafseer(btn) {
+    const body = btn.nextElementSibling;
+    body.classList.toggle('open');
+    btn.textContent = body.classList.contains('open') ? '📖 إخفاء التفسير' : '📖 تفسير الطبري';
+  }
+
+  // TRACKER
+  function getStartDate() {
+    return localStorage.getItem('recoveryStart');
+  }
+
+  function calcDays(startStr) {
+    if (!startStr) return 0;
+    const start = new Date(startStr);
+    const now = new Date();
+    const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+    return Math.max(0, diff);
+  }
+
+  function updateTracker() {
+    const start = getStartDate();
+    const days = calcDays(start);
+    document.getElementById('dayCount').textContent = days;
+
+    if (start) {
+      const d = new Date(start);
+      document.getElementById('startDateLabel').textContent =
+        'بدأت في: ' + d.toLocaleDateString('ar-EG', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+    }
+
+    const milestones = [1, 7, 30, 90, 180, 365];
+    let currentMilestone = null;
+    milestones.forEach(m => {
+      const el = document.getElementById('m' + m);
+      if (days >= m) {
+        el.classList.add('achieved');
+        el.querySelector('.m-check').textContent = '🏆';
+        currentMilestone = m;
+      } else {
+        el.classList.remove('achieved');
+        el.querySelector('.m-check').textContent = '⚪';
+      }
+    });
+
+    const ring = document.getElementById('counterRing');
+    const badge = document.getElementById('milestoneBadge');
+    if (milestones.includes(days) && days > 0) {
+      ring.classList.add('milestone');
+      badge.classList.add('show');
+      badge.textContent = '🏆 ' + days + ' يوم!';
+    } else {
+      ring.classList.remove('milestone');
+      badge.classList.remove('show');
+    }
+  }
+
+  function setStartDate() {
+    const today = new Date().toISOString().split('T')[0];
+    localStorage.setItem('recoveryStart', today);
+    updateTracker();
+    showToast('✅ تم تسجيل يوم البداية!', 'green');
+  }
+
+  function showRelapseModal() {
+    document.getElementById('relapseModal').classList.add('show');
+  }
+
+  function closeRelapseModal() {
+    document.getElementById('relapseModal').classList.remove('show');
+  }
+
+  function confirmRelapse() {
+    localStorage.removeItem('recoveryStart');
+    updateTracker();
+    closeRelapseModal();
+    showToast('💪 شجاعتك في الاعتراف دليل قوة — ابدأ من جديد', 'gold');
+  }
+
+  // SHIELDS
+  function toggleShield(card) {
+    card.classList.toggle('open');
+  }
+
+  // MORNING CHECKLIST
+  function loadMorningState() {
+    const today = new Date().toISOString().split('T')[0];
+    const saved = JSON.parse(localStorage.getItem('morning_' + today) || '{}');
+    document.querySelectorAll('.check-item').forEach(item => {
+      const key = item.dataset.key;
+      if (saved[key]) item.classList.add('done');
+    });
+  }
+
+  function toggleCheck(item) {
+    item.classList.toggle('done');
+    const today = new Date().toISOString().split('T')[0];
+    const saved = JSON.parse(localStorage.getItem('morning_' + today) || '{}');
+    saved[item.dataset.key] = item.classList.contains('done');
+    localStorage.setItem('morning_' + today, JSON.stringify(saved));
+
+    const all = document.querySelectorAll('.check-item');
+    const done = document.querySelectorAll('.check-item.done');
+    if (done.length === all.length) {
+      showToast('🌟 أتممت جرعة الصباح كاملة!', 'gold');
+    }
+  }
+
+  function resetMorning() {
+    const today = new Date().toISOString().split('T')[0];
+    localStorage.removeItem('morning_' + today);
+    document.querySelectorAll('.check-item').forEach(i => i.classList.remove('done'));
+  }
+
+  // CLOCK — 12 hour Egyptian style
+  function updateClock() {
+    const now = new Date();
+    let h = now.getHours();
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const isAM = h < 12;
+    h = h % 12 || 12;
+    const hStr = String(h).padStart(2, '0');
+    document.getElementById('clockDisplay').textContent = hStr + ':' + m;
+    document.getElementById('clockAmPm').textContent = isAM ? 'ص' : 'م';
+    document.getElementById('dateDisplay').textContent =
+      now.toLocaleDateString('ar-EG', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  }
+
+  // DAILY QUOTE
+  function setDailyQuote() {
+    const idx = new Date().getDate() % QUOTES.length;
+    document.getElementById('dailyQuote').textContent = QUOTES[idx];
+  }
+
+  // TOAST
+  function showToast(msg, type = '') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + type + ' show';
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // MOOD SYSTEM
+  function setMood(mood, btn) {
+    // Update active button
+    document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // Apply mood class to body
+    document.body.classList.remove('mood-stable','mood-stress','mood-relapse');
+    document.body.classList.add('mood-' + mood);
+    // Save mood
+    localStorage.setItem('currentMood', mood);
+    const msgs = {
+      stable: '🌿 ممتاز — استمر في ثباتك',
+      stress: '🌊 ربنا معاك — خد نفس عميق',
+      relapse: '🕊 شجاعة وبداية جديدة',
+    };
+    showToast(msgs[mood], mood === 'stable' ? 'green' : 'gold');
+  }
+
+  function loadMood() {
+    const saved = localStorage.getItem('currentMood') || 'stable';
+    document.body.classList.add('mood-' + saved);
+    const btn = document.querySelector('.mood-' + saved + '-btn');
+    if (btn) {
+      document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  }
+
+  // INIT
+  updateTracker();
+  loadMood();
+  loadMorningState();
+  updateClock();
+  setDailyQuote();
+  setInterval(updateClock, 30000);
+  setInterval(updateTracker, 60000);
+  // PATTERNS
+  const DEFAULT_DESTRUCTION = [
+    "تسويف الالتزامات وتأجيل المطلوبات.",
+    "منع الراحة والمتع الصحية عن النفس.",
+    "التشتيت وفتح أكتر من نافذة ومشروع في وقت واحد.",
+    "التفكير المفرط في المستقبل.",
+    "الهروب إلى تخيلات أكون فيها البطل.",
+    "الحساسية المفرطة تجاه النقد والتدقيق في أقل كلمة.",
+  ];
+
+  const DEFAULT_TRICKS = [
+    "\"بكرة هتوقف\" — الشيطان بيعدك بإرادة مستقبلية مش موجودة دلوقتي.",
+    "\"مرة واحدة بس\" — مفيش مرة واحدة بس في الإدمان.",
+    "\"أنت تعبت ومحتاج ترتاح\" — الراحة الحقيقية مش في المعصية.",
+    "\"ربنا غفور رحيم\" — يستخدم رحمة الله مبرر للاستمرار.",
+    "\"أنت ضعيف من الأصل\" — كذبة تقنعك إنك مش قادر تقاوم.",
+    "\"لسه صغير\" — يضيّع وقتك بالتأجيل حتى 'وقت مناسب' مش هييجي.",
+    "\"الناس كلها بتعمل كده\" — التطبيع بالذنب.",
+    "\"جسمك محتاج\" — بيحوّل شهوة طبيعية لضرورة ملحة.",
+  ];
+
+  let currentModalType = 'destruction';
+
+  function renderPatterns() {
+    const customDestruction = JSON.parse(localStorage.getItem('patterns_destruction') || '[]');
+    const customTricks = JSON.parse(localStorage.getItem('patterns_tricks') || '[]');
+
+    renderList('destruction-list', DEFAULT_DESTRUCTION, customDestruction, 'destruction');
+    renderList('tricks-list', DEFAULT_TRICKS, customTricks, 'tricks');
+  }
+
+  function renderList(containerId, defaults, customs, type) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    defaults.forEach((text, i) => {
+      container.appendChild(makePatternEl(text, i + 1, type, false, null));
+    });
+
+    customs.forEach((text, i) => {
+      container.appendChild(makePatternEl(text, defaults.length + i + 1, type, true, i));
+    });
+  }
+
+  function makePatternEl(text, num, type, isCustom, customIndex) {
+    const div = document.createElement('div');
+    div.className = `pattern-item ${type}${isCustom ? ' custom' : ''}`;
+    div.innerHTML = `
+      <span class="pattern-num">${num}</span>
+      <span class="pattern-text">${isCustom ? '<span class="pattern-badge">جديد</span>' : ''}${text}</span>
+      ${isCustom ? `<button class="pattern-delete" onclick="deletePattern('${type}',${customIndex})" title="حذف">✕</button>` : ''}
+    `;
+    return div;
+  }
+
+  function showAddModal(type) {
+    currentModalType = type;
+    document.getElementById('addModalTitle').textContent = type === 'destruction' ? '💣 إضافة نمط تدمير ذاتي' : '😈 إضافة خدعة شيطانية';
+    document.getElementById('patternInput').value = '';
+    document.getElementById('addPatternModal').classList.add('show');
+    setTimeout(() => document.getElementById('patternInput').focus(), 100);
+  }
+
+  function closeAddModal() {
+    document.getElementById('addPatternModal').classList.remove('show');
+  }
+
+  function savePattern() {
+    const val = document.getElementById('patternInput').value.trim();
+    if (!val) return;
+    const key = 'patterns_' + currentModalType;
+    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+    existing.push(val);
+    localStorage.setItem(key, JSON.stringify(existing));
+    closeAddModal();
+    renderPatterns();
+    showToast('✅ تم الحفظ!', 'green');
+  }
+
+  function deletePattern(type, index) {
+    const key = 'patterns_' + type;
+    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+    existing.splice(index, 1);
+    localStorage.setItem(key, JSON.stringify(existing));
+    renderPatterns();
+  }
+
+  renderPatterns();
+
+  // =============================================
+  // ALLAH'S NAMES
+  // =============================================
+  const ALLAH_NAMES = [
+    { name: 'الرحمن', meaning: 'ذو الرحمة الواسعة', explain: 'رحمانيته سبقت كل شيء — قبل أن تُخلق، كانت رحمته معدّة لك. كل نفَس تتنفسه، وكل صحوة من نوم، هي لمسة من الرحمن. يومك اليوم محاط برحمة لم تطلبها — فقط أُعطيت لك.' },
+    { name: 'الرحيم', meaning: 'دائم الرحمة بالمؤمنين', explain: 'الرحيم خاصة بالمؤمنين — وأنت منهم. كل مرة قاومت فيها وانتصرت، هو الرحيم يدّك. وكل مرة سقطت وقمت، هو الرحيم يرفعك. رحمته لا تنقطع حتى في لحظات الضعف.' },
+    { name: 'الملك', meaning: 'المالك لكل شيء', explain: 'كل ما يقلقك — صحتك، مستقبلك، علاقاتك — هو يملكها. وملِك حقيقي لا يترك رعاياه ضائعين. استرح اليوم في ظل مَن يملك كل شيء ويُدبّر أمرك.' },
+    { name: 'القدوس', meaning: 'المنزّه عن كل نقص', explain: 'قدسيته تعني أنه لا يظلم أبدًا. ما تحسه من ألم أو غياب عدل — هو يراه. والقدوس لا يُضيع شيئًا. نقاؤه يوحي لك أنك ممكن تسعى للنقاء — لأنه أحبّه.' },
+    { name: 'السلام', meaning: 'مصدر السلام الحقيقي', explain: 'السلام الذي تبحث عنه في كل مكان — هو عنده. مش في لحظة متعة، مش في هروب. السلام الحقيقي يأتي فقط حين تسكن في قُرب السلام نفسه.' },
+    { name: 'التواب', meaning: 'كثير القبول للتوبة', explain: 'التواب — مش بس يقبل التوبة، بل يُحبها ويفرح بها. كلما رجعت إليه، وجدته أمامك. لا أحد تاب تابًا صادقًا ووجد الباب مغلقًا. أنت اليوم تتوب — والتواب يستقبلك.' },
+    { name: 'الغفور', meaning: 'يغفر الذنوب كلها', explain: 'الغفور يمحو — مش بس يستر. يمحو الذنب من السجل كأنه ما كانش. حجم الذنب لا يعني شيئًا أمام اتساع مغفرته. تذكر: غفرانه أكبر من خطيئتك دائمًا.' },
+    { name: 'الشكور', meaning: 'يُثيب على القليل كثيرًا', explain: 'كل خطوة صغيرة تخطوها نحو الطهر، هو يشكرها ويُثيب عليها. مقاومتك اليوم — ولو لدقائق — هو يراها ويُقدّرها. الشكور لا يُضيع جهدًا ولو كان مثقال ذرة.' },
+    { name: 'الحليم', meaning: 'لا يعجل بالعقوبة', explain: 'حلمه عليك وأنت في أحلك لحظاتك دليل على أنه لا يعاجل بالعقوبة. يُمهل ليُتاح لك الرجوع. حلمه ليس غفلة — بل حبًا واحتسابًا لعودتك.' },
+    { name: 'العليم', meaning: 'يعلم كل شيء', explain: 'يعلم ما في قلبك أكثر مما تعلم أنت. يعلم ألمك، صراعك، نيتك. ولأنه يعلم — حكمه عليك رحيم ودقيق. لا تخف أن "يكتشف" شيئًا — هو عالم وغافر.' },
+    { name: 'الكريم', meaning: 'واسع العطاء والجود', explain: 'الكريم يُعطي بلا حساب ولا منّ. كل نعمة في حياتك من كريم لم يبخل. وكرمه في الآخرة أعظم. اطلب منه اليوم بلا تردد — الكريم يُحب أن يُعطي.' },
+    { name: 'اللطيف', meaning: 'يصل لطفه لكل شيء خفي', explain: 'اللطيف يُدبّر أمورك من حيث لا ترى. أحيانًا تمر أيام وتحس إن ربنا بعيد — لكنه اللطيف يعمل في الخفاء لمصلحتك. ثق في لطفه حتى حين لا تراه.' },
+    { name: 'الودود', meaning: 'يحب عباده ويُحبّه العباد', explain: 'الودود يحبك — مش لأنك كامل، بل لأنه اختار أن يُحب. محبته لا تنتهي ولا تتوقف على أفعالك. عُد إليه وأنت تعلم أن الودود ينتظرك بمحبة.' },
+    { name: 'الصبور', meaning: 'يصبر على عباده كثيرًا', explain: 'صبر الله عليك في كل مرة أخطأت — هو لطف منه. الصبور لم ييأس منك. فلماذا تيأس من نفسك؟ إن كان الصبور صابرًا عليك، فأنت أحق أن تصبر على نفسك.' },
+    { name: 'الوكيل', meaning: 'يتولى أمر من يتوكل عليه', explain: 'فوّض أمرك للوكيل اليوم. مش معناه كسل — معناه أنك تعمل وتعلم أن النتيجة بيده. التوكل عليه يُريح القلب من ثقل التحكم.' },
+    { name: 'المجيب', meaning: 'يجيب دعاء من دعاه', explain: 'كل دعاء ترفعه — المجيب يسمعه. قد يجيب بطريقة لا تتخيلها، أو في وقت لا تتوقعه — لكنه لا يُهمل مَن ناداه. نادِه اليوم.' },
+    { name: 'الحق', meaning: 'الثابت الوجود الحقيقي', explain: 'كل ما حولك مؤقت وزائل — والحق وحده الثابت. الثبات الذي تبحث عنه يأتي من التعلق بالحق.' },
+    { name: 'القريب', meaning: 'قريب من كل عبد', explain: 'ونحن أقرب إليه من حبل الوريد. القريب ليس في السماء البعيدة فقط — هو أقرب لقلبك من نفسك. في أحلك اللحظات، ارفع رأسك — هو هناك.' },
+    { name: 'الرزاق', meaning: 'يرزق كل شيء', explain: 'رزقك مكتوب وما ينقص. ومنه رزق الإرادة والقوة على المقاومة. اطلب منه اليوم أن يرزقك قوة تتجاوز بها لحظة ضعفك.' },
+    { name: 'الحي القيوم', meaning: 'الحي الدائم القائم على كل شيء', explain: 'الحي القيوم — لا ينام ولا يغفل. في منتصف الليل حين تصارع وحدك، هو القيوم يراك ويقوم على أمرك. لستَ وحدك أبدًا.' },
+    { name: 'العفو', meaning: 'يعفو ويمحو أثر الذنب', explain: 'العفو يمحو حتى أثر الذنب من الذاكرة الإلهية. لا يبقى منه شيء. ليس فقط ستر — بل محو كامل. هذا هو ربك اليوم.' },
+    { name: 'النور', meaning: 'نوره يُضيء الوجود كله', explain: 'اللَّهُ نُورُ السَّمَاوَاتِ وَالأَرْض. في أظلم لحظاتك — النور موجود. اقتربه يُضئ لك الطريق. لا ظلام يدوم مع النور.' },
+    { name: 'الهادي', meaning: 'يهدي من يشاء', explain: 'أنت هنا، تقرأ هذا، تُقاوم — هو الهادي الذي هداك. الهداية ليست خطًا مستقيمًا — أحيانًا تعثّر وعودة. لكن الهادي يظل يشير للطريق.' },
+    { name: 'الغني', meaning: 'غير محتاج لأحد', explain: 'غِناه يعني أن عطاءه لك ليس لأنه يحتاجك — بل لأنه يُحب العطاء. طاعتك لمصلحتك أنت لا له.' },
+    { name: 'الفتاح', meaning: 'يفتح أبواب الرحمة والرزق', explain: 'كل باب حُسم في وجهك، هو الفتاح يفتح غيره. ربما ما تظنه إغلاقًا هو توجيه نحو باب أفضل. لا تستسلم — الفتاح لم يُغلق عليك كل الأبواب.' },
+    { name: 'البصير', meaning: 'يرى كل شيء', explain: 'يرى صراعك الداخلي الذي لا يراه أحد. يرى المرة التي أردت الخطأ فمنعت نفسك. يرى الدمعة الخفية. ولأنه يرى — هو يُثيب على ما لا يراه الناس.' },
+    { name: 'الشهيد', meaning: 'شاهد على كل شيء', explain: 'كل لحظة صمود شهدها الشهيد. كل نية صادقة سجّلها. يومك اليوم — كل لحظة خير فيه — مشهود ومحفوظ عنده.' },
+    { name: 'الواسع', meaning: 'رحمته وعلمه يسع كل شيء', explain: 'مهما بلغ ذنبك، رحمته أوسع. مهما كان همّك، قدرته أوسع. الواسع لا يضيق.' },
+    { name: 'القهار', meaning: 'يقهر كل شيء بقدرته', explain: 'القهار يقهر الشيطان ويقهر الشهوة. لو استعنت به، قوته فيك أعظم من قوة عدوك. "لا حول ولا قوة إلا بالله" — طلب من قهاريته.' },
+    { name: 'الولي', meaning: 'الناصر والمتولي لشؤون المؤمنين', explain: 'الولي يتولى أمر مَن آمن به. أنت لست وحدك في معركتك — وليّك أقوى من أي عدو.' },
+  ];
+
+  function showAllahName() {
+    const today = new Date();
+    const idx = (today.getFullYear() * 366 + today.getMonth() * 31 + today.getDate()) % ALLAH_NAMES.length;
+    const n = ALLAH_NAMES[idx];
+    document.getElementById('allahName').textContent = n.name;
+    document.getElementById('allahMeaning').textContent = n.meaning;
+    document.getElementById('allahExplain').textContent = n.explain;
+    const lastSeen = localStorage.getItem('allahModalDate');
+    const todayStr = today.toISOString().split('T')[0];
+    if (lastSeen !== todayStr) {
+      document.getElementById('allahModal').classList.add('show');
+    }
+  }
+
+  function closeAllahModal() {
+    document.getElementById('allahModal').classList.remove('show');
+    localStorage.setItem('allahModalDate', new Date().toISOString().split('T')[0]);
+  }
+
+  // =============================================
+  // DAILY TASKS
+  // =============================================
+  function getTasksKey() { return 'tasks_' + new Date().toISOString().split('T')[0]; }
+
+  function updateTasksProgress() {
+    const all = document.querySelectorAll('.task-item');
+    const done = document.querySelectorAll('.task-item.done');
+    const total = all.length, pct = total ? Math.round((done.length / total) * 100) : 0;
+    document.getElementById('tasksProgressBar').style.width = pct + '%';
+    document.getElementById('tasksProgressLabel').textContent = done.length + ' من ' + total + ' مهمة مكتملة';
+    if (done.length === total && total > 0) showToast('🌟 أتممت كل مهام اليوم — ربنا يكرمك!', 'gold');
+  }
+
+  function toggleTask(item, key) {
+    item.classList.toggle('done');
+    const saved = JSON.parse(localStorage.getItem(getTasksKey()) || '{}');
+    saved[key] = item.classList.contains('done');
+    localStorage.setItem(getTasksKey(), JSON.stringify(saved));
+    updateTasksProgress();
+  }
+
+  function loadTasksState() {
+    const saved = JSON.parse(localStorage.getItem(getTasksKey()) || '{}');
+    document.querySelectorAll('.task-item').forEach(item => {
+      if (saved[item.dataset.key]) item.classList.add('done');
+    });
+    renderCustomTasks();
+    updateTasksProgress();
+  }
+
+  function resetTasks() {
+    localStorage.removeItem(getTasksKey());
+    document.querySelectorAll('.task-item').forEach(i => i.classList.remove('done'));
+    updateTasksProgress();
+    showToast('🔄 تم إعادة تعيين المهام', '');
+  }
+
+  function showTaskModal() {
+    document.getElementById('taskTitleInput').value = '';
+    document.getElementById('taskDescInput').value = '';
+    document.getElementById('addTaskModal').classList.add('show');
+    setTimeout(() => document.getElementById('taskTitleInput').focus(), 100);
+  }
+  function closeTaskModal() { document.getElementById('addTaskModal').classList.remove('show'); }
+
+  function saveTask() {
+    const title = document.getElementById('taskTitleInput').value.trim();
+    if (!title) return;
+    const desc = document.getElementById('taskDescInput').value.trim();
+    const tasks = JSON.parse(localStorage.getItem('custom_tasks') || '[]');
+    tasks.push({ title, desc, id: Date.now() });
+    localStorage.setItem('custom_tasks', JSON.stringify(tasks));
+    closeTaskModal();
+    renderCustomTasks();
+    updateTasksProgress();
+    showToast('✅ تمت إضافة المهمة!', 'green');
+  }
+
+  function renderCustomTasks() {
+    const tasks = JSON.parse(localStorage.getItem('custom_tasks') || '[]');
+    const saved = JSON.parse(localStorage.getItem(getTasksKey()) || '{}');
+    const container = document.getElementById('customTasksList');
+    container.innerHTML = '';
+    tasks.forEach((t, i) => {
+      const key = 'ct_' + t.id;
+      const div = document.createElement('div');
+      div.className = 'check-item task-item' + (saved[key] ? ' done' : '');
+      div.dataset.key = key;
+      div.onclick = function() { toggleTask(this, key); };
+      div.innerHTML = `
+        <div class="check-box">✓</div>
+        <div class="check-content" style="flex:1;">
+          <div class="c-title">${t.title}</div>
+          ${t.desc ? `<div class="c-desc">${t.desc}</div>` : ''}
+        </div>
+        <button onclick="event.stopPropagation();deleteCustomTask(${i})" style="background:none;border:none;color:#bbb;cursor:pointer;font-size:0.85rem;padding:2px 6px;border-radius:4px;flex-shrink:0;" title="حذف">✕</button>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function deleteCustomTask(index) {
+    const tasks = JSON.parse(localStorage.getItem('custom_tasks') || '[]');
+    tasks.splice(index, 1);
+    localStorage.setItem('custom_tasks', JSON.stringify(tasks));
+    renderCustomTasks();
+    updateTasksProgress();
+  }
+
+  // =============================================
+  // SHIELDS (custom)
+  // =============================================
+  function showShieldModal() {
+    ['shieldTitleInput','shieldKeywordInput','shieldStepsInput'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('addShieldModal').classList.add('show');
+    setTimeout(() => document.getElementById('shieldTitleInput').focus(), 100);
+  }
+  function closeShieldModal() { document.getElementById('addShieldModal').classList.remove('show'); }
+
+  function saveShield() {
+    const title = document.getElementById('shieldTitleInput').value.trim();
+    if (!title) return;
+    const keyword = document.getElementById('shieldKeywordInput').value.trim();
+    const steps = document.getElementById('shieldStepsInput').value.trim().split('\n').filter(s => s.trim());
+    const shields = JSON.parse(localStorage.getItem('custom_shields') || '[]');
+    shields.push({ title, keyword, steps, id: Date.now() });
+    localStorage.setItem('custom_shields', JSON.stringify(shields));
+    closeShieldModal();
+    renderCustomShields();
+    showToast('🛡 تمت إضافة الدرع!', 'green');
+  }
+
+  function renderCustomShields() {
+    const shields = JSON.parse(localStorage.getItem('custom_shields') || '[]');
+    const container = document.getElementById('customShieldsList');
+    container.innerHTML = '';
+    shields.forEach((s, i) => {
+      const div = document.createElement('div');
+      div.className = 'shield-card';
+      div.innerHTML = `
+        <div class="shield-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="shield-header-left">
+            <div class="shield-icon green">🛡</div>
+            <div>
+              <div class="shield-title">${s.title}</div>
+              ${s.keyword ? `<div class="shield-code">كلمة السر: <strong>"${s.keyword}"</strong></div>` : ''}
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <button onclick="event.stopPropagation();deleteShield(${i})" style="background:none;border:none;color:#ccc;cursor:pointer;font-size:0.8rem;" title="حذف">✕</button>
+            <div class="shield-arrow">▼</div>
+          </div>
+        </div>
+        <div class="shield-body">
+          ${s.steps.map((step, n) => `<div class="shield-step"><div class="step-num">${n+1}</div><div class="step-content">${step}</div></div>`).join('')}
+        </div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function deleteShield(i) {
+    const shields = JSON.parse(localStorage.getItem('custom_shields') || '[]');
+    shields.splice(i, 1);
+    localStorage.setItem('custom_shields', JSON.stringify(shields));
+    renderCustomShields();
+  }
+
+  // =============================================
+  // HOPE (custom)
+  // =============================================
+  function showHopeModal() {
+    ['hopeTitleInput','hopeIconInput','hopeQuoteInput'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('addHopeModal').classList.add('show');
+    setTimeout(() => document.getElementById('hopeTitleInput').focus(), 100);
+  }
+  function closeHopeModal() { document.getElementById('addHopeModal').classList.remove('show'); }
+
+  function saveHope() {
+    const title = document.getElementById('hopeTitleInput').value.trim();
+    if (!title) return;
+    const icon = document.getElementById('hopeIconInput').value.trim() || '💛';
+    const quote = document.getElementById('hopeQuoteInput').value.trim();
+    const hopes = JSON.parse(localStorage.getItem('custom_hopes') || '[]');
+    hopes.push({ title, icon, quote, id: Date.now() });
+    localStorage.setItem('custom_hopes', JSON.stringify(hopes));
+    closeHopeModal();
+    renderCustomHopes();
+    showToast('💛 تمت إضافة الدافع!', 'green');
+  }
+
+  function renderCustomHopes() {
+    const hopes = JSON.parse(localStorage.getItem('custom_hopes') || '[]');
+    const container = document.getElementById('customHopesList');
+    container.innerHTML = '';
+    hopes.forEach((h, i) => {
+      const div = document.createElement('div');
+      div.className = 'hope-item';
+      div.innerHTML = `
+        <div class="hope-icon">${h.icon}</div>
+        <div class="hope-text" style="flex:1;"><strong>${h.title}</strong>${h.quote ? `<div class="hope-quote">"${h.quote}"</div>` : ''}</div>
+        <button onclick="deleteHope(${i})" style="background:none;border:none;color:#ccc;cursor:pointer;font-size:0.85rem;padding:2px 6px;flex-shrink:0;" title="حذف">✕</button>`;
+      container.appendChild(div);
+    });
+  }
+
+  function deleteHope(i) {
+    const hopes = JSON.parse(localStorage.getItem('custom_hopes') || '[]');
+    hopes.splice(i, 1);
+    localStorage.setItem('custom_hopes', JSON.stringify(hopes));
+    renderCustomHopes();
+  }
+
+  // =============================================
+  // LOSSES (custom)
+  // =============================================
+  function showLossModal() {
+    ['lossCatInput','lossTitleInput','lossDescInput'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('addLossModal').classList.add('show');
+    setTimeout(() => document.getElementById('lossCatInput').focus(), 100);
+  }
+  function closeLossModal() { document.getElementById('addLossModal').classList.remove('show'); }
+
+  function saveLoss() {
+    const title = document.getElementById('lossTitleInput').value.trim();
+    if (!title) return;
+    const cat = document.getElementById('lossCatInput').value.trim() || 'أخرى';
+    const desc = document.getElementById('lossDescInput').value.trim();
+    const losses = JSON.parse(localStorage.getItem('custom_losses') || '[]');
+    losses.push({ title, cat, desc, id: Date.now() });
+    localStorage.setItem('custom_losses', JSON.stringify(losses));
+    closeLossModal();
+    renderCustomLosses();
+    showToast('📜 تمت الإضافة', 'green');
+  }
+
+  function renderCustomLosses() {
+    const losses = JSON.parse(localStorage.getItem('custom_losses') || '[]');
+    const container = document.getElementById('customLossesList');
+    container.innerHTML = '';
+    losses.forEach((l, i) => {
+      const div = document.createElement('div');
+      div.className = 'loss-item';
+      div.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div style="flex:1;"><strong>${l.title} <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">[${l.cat}]</span></strong>${l.desc ? '<br>' + l.desc : ''}</div>
+          <button onclick="deleteLoss(${i})" style="background:none;border:none;color:#ccc;cursor:pointer;font-size:0.8rem;padding:2px 6px;flex-shrink:0;" title="حذف">✕</button>
+        </div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function deleteLoss(i) {
+    const losses = JSON.parse(localStorage.getItem('custom_losses') || '[]');
+    losses.splice(i, 1);
+    localStorage.setItem('custom_losses', JSON.stringify(losses));
+    renderCustomLosses();
+  }
+
+  // =============================================
+  // LIBRARY
+  // =============================================
+  function showLibraryModal() {
+    ['libTitleInput','libAuthorInput','libUrlInput','libSummaryInput','libPointsInput'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('addLibraryModal').classList.add('show');
+    setTimeout(() => document.getElementById('libTitleInput').focus(), 100);
+  }
+  function closeLibraryModal() { document.getElementById('addLibraryModal').classList.remove('show'); }
+
+  function saveLibraryItem() {
+    const title = document.getElementById('libTitleInput').value.trim();
+    if (!title) return;
+    const author  = document.getElementById('libAuthorInput').value.trim();
+    const url     = document.getElementById('libUrlInput').value.trim();
+    const summary = document.getElementById('libSummaryInput').value.trim();
+    const points  = document.getElementById('libPointsInput').value.trim().split('\n').filter(p => p.trim());
+    const items = JSON.parse(localStorage.getItem('library_items') || '[]');
+    items.unshift({ title, author, url, summary, points, id: Date.now(), date: new Date().toLocaleDateString('ar-EG') });
+    localStorage.setItem('library_items', JSON.stringify(items));
+    closeLibraryModal();
+    renderLibrary();
+    showToast('📚 تمت إضافة المصدر!', 'green');
+  }
+
+  function renderLibrary() {
+    const items = JSON.parse(localStorage.getItem('library_items') || '[]');
+    const container = document.getElementById('libraryList');
+    const empty = document.getElementById('libraryEmpty');
+    container.innerHTML = '';
+    empty.style.display = items.length ? 'none' : 'block';
+    items.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'shield-card';
+      div.style.marginBottom = '1rem';
+      const pointsHtml = item.points && item.points.length
+        ? '<div style="font-size:0.82rem;color:var(--gold);font-weight:700;margin:0.75rem 0 0.35rem;">✨ أهم النقاط:</div><ul style="margin:0;padding-right:1.2rem;list-style:disc;">' +
+          item.points.map(p => `<li style="font-size:0.85rem;color:var(--text-dim);line-height:1.7;margin-bottom:0.2rem;">${p}</li>`).join('') + '</ul>' : '';
+      div.innerHTML = `
+        <div class="shield-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="shield-header-left" style="gap:0.6rem;">
+            <div style="font-size:1.4rem;">🎬</div>
+            <div>
+              <div class="shield-title">${item.title}</div>
+              <div class="shield-code">${item.author ? item.author + ' — ' : ''}${item.date}${item.url ? ` — <a href="${item.url}" target="_blank" onclick="event.stopPropagation()" style="color:var(--blue);font-size:0.75rem;">رابط ↗</a>` : ''}</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <button onclick="event.stopPropagation();deleteLibraryItem(${i})" style="background:none;border:none;color:#ccc;cursor:pointer;font-size:0.8rem;" title="حذف">✕</button>
+            <div class="shield-arrow">▼</div>
+          </div>
+        </div>
+        <div class="shield-body">
+          ${item.summary ? `<div style="font-size:0.88rem;color:var(--text-dim);line-height:1.8;"><strong style="color:var(--text);">الملخص:</strong><br>${item.summary}</div>` : ''}
+          ${pointsHtml}
+        </div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function deleteLibraryItem(i) {
+    const items = JSON.parse(localStorage.getItem('library_items') || '[]');
+    items.splice(i, 1);
+    localStorage.setItem('library_items', JSON.stringify(items));
+    renderLibrary();
+  }
+
+  // =============================================
+  // INIT ALL NEW FEATURES
+  // =============================================
+  showAllahName();
+  loadTasksState();
+  renderCustomShields();
+  renderCustomHopes();
+  renderCustomLosses();
+  renderLibrary();
+</script>
+</body>
+</html>
