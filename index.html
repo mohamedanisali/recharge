@@ -875,11 +875,101 @@
     border-radius: 10px;
     padding: 0.9rem 1.1rem;
     display: flex;
-    align-items: flex-start;
-    gap: 0.9rem;
+    flex-direction: column;
+    gap: 0.6rem;
     transition: all 0.2s;
     position: relative;
   }
+
+  .pattern-item-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    width: 100%;
+  }
+
+  .pattern-note {
+    width: 100%;
+    background: #f9fafb;
+    border: 1px dashed #d0d7e3;
+    border-radius: 7px;
+    padding: 0.5rem 0.75rem;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text);
+    direction: rtl;
+    resize: none;
+    outline: none;
+    line-height: 1.7;
+    min-height: 60px;
+    transition: border-color 0.2s;
+  }
+
+  .pattern-note::placeholder { color: #b0b8c8; }
+  .pattern-note:focus { border-color: var(--gold) !important; background: #fffdf5; }
+
+  .pattern-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .pattern-entry {
+    background: #f0f4fa;
+    border-radius: 6px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.82rem;
+    color: var(--text);
+    line-height: 1.65;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .pattern-entry-text { flex: 1; }
+
+  .pattern-entry-delete {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 0.72rem;
+    padding: 0 3px;
+    flex-shrink: 0;
+    line-height: 1.8;
+    transition: color 0.15s;
+  }
+  .pattern-entry-delete:hover { color: var(--red); }
+
+  .pattern-note-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+  }
+
+  .pattern-note-row .pattern-note {
+    flex: 1;
+    min-height: 44px;
+    margin: 0;
+  }
+
+  .pattern-note-save {
+    background: var(--gold);
+    border: none;
+    border-radius: 7px;
+    color: #0d0f14;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0 0.9rem;
+    height: 44px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .pattern-note-save:hover { background: var(--gold-light); }
 
   .pattern-item:hover { border-color: #b0bcd0; }
   .pattern-item.destruction { border-right: 3px solid #f5b8b8; }
@@ -2336,13 +2426,66 @@
   }
 
   function makePatternEl(text, num, type, isCustom, customIndex) {
+    const entriesKey = `pattern_entries_${type}_${num}`;
     const div = document.createElement('div');
     div.className = `pattern-item ${type}${isCustom ? ' custom' : ''}`;
+
+    function getEntries() {
+      return JSON.parse(localStorage.getItem(entriesKey) || '[]');
+    }
+    function saveEntries(arr) {
+      localStorage.setItem(entriesKey, JSON.stringify(arr));
+    }
+    function renderEntries() {
+      const list = div.querySelector('.pattern-entries');
+      const entries = getEntries();
+      list.innerHTML = entries.map((e, i) => `
+        <div class="pattern-entry">
+          <span class="pattern-entry-text">${e}</span>
+          <button class="pattern-entry-delete" onclick="(function(){
+            const arr = JSON.parse(localStorage.getItem('${entriesKey}') || '[]');
+            arr.splice(${i}, 1);
+            localStorage.setItem('${entriesKey}', JSON.stringify(arr));
+            const items = document.querySelectorAll('.pattern-item');
+            items.forEach(el => { if(el.dataset.ekey === '${entriesKey}') el.querySelector('.pattern-entries') && renderEntriesFor(el, '${entriesKey}'); });
+          })()">✕</button>
+        </div>`).join('');
+    }
+
+    div.dataset.ekey = entriesKey;
     div.innerHTML = `
-      <span class="pattern-num">${num}</span>
-      <span class="pattern-text">${isCustom ? '<span class="pattern-badge">جديد</span>' : ''}${text}</span>
-      ${isCustom ? `<button class="pattern-delete" onclick="deletePattern('${type}',${customIndex})" title="حذف">✕</button>` : ''}
+      <div class="pattern-item-top">
+        <span class="pattern-num">${num}</span>
+        <span class="pattern-text">${isCustom ? '<span class="pattern-badge">جديد</span>' : ''}${text}</span>
+        ${isCustom ? `<button class="pattern-delete" onclick="deletePattern('${type}',${customIndex})" title="حذف">✕</button>` : ''}
+      </div>
+      <div class="pattern-entries"></div>
+      <div class="pattern-note-row">
+        <textarea class="pattern-note" placeholder="بيجيلك في شكل إيه؟ اكتب هنا..."></textarea>
+        <button class="pattern-note-save">＋ إضافة</button>
+      </div>
     `;
+
+    renderEntries();
+
+    div.querySelector('.pattern-note-save').addEventListener('click', () => {
+      const ta = div.querySelector('.pattern-note');
+      const val = ta.value.trim();
+      if (!val) return;
+      const arr = getEntries();
+      arr.push(val);
+      saveEntries(arr);
+      ta.value = '';
+      renderEntries();
+    });
+
+    div.querySelector('.pattern-note').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        div.querySelector('.pattern-note-save').click();
+      }
+    });
+
     return div;
   }
 
@@ -2423,11 +2566,7 @@
     document.getElementById('allahName').textContent = n.name;
     document.getElementById('allahMeaning').textContent = n.meaning;
     document.getElementById('allahExplain').textContent = n.explain;
-    const lastSeen = localStorage.getItem('allahModalDate');
-    const todayStr = today.toISOString().split('T')[0];
-    if (lastSeen !== todayStr) {
-      document.getElementById('allahModal').classList.add('show');
-    }
+    document.getElementById('allahModal').classList.add('show');
   }
 
   function closeAllahModal() {
