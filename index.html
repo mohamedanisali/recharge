@@ -875,101 +875,11 @@
     border-radius: 10px;
     padding: 0.9rem 1.1rem;
     display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
+    align-items: flex-start;
+    gap: 0.9rem;
     transition: all 0.2s;
     position: relative;
   }
-
-  .pattern-item-top {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.9rem;
-    width: 100%;
-  }
-
-  .pattern-note {
-    width: 100%;
-    background: #f9fafb;
-    border: 1px dashed #d0d7e3;
-    border-radius: 7px;
-    padding: 0.5rem 0.75rem;
-    font-family: 'Cairo', sans-serif;
-    font-size: 0.82rem;
-    color: var(--text);
-    direction: rtl;
-    resize: none;
-    outline: none;
-    line-height: 1.7;
-    min-height: 60px;
-    transition: border-color 0.2s;
-  }
-
-  .pattern-note::placeholder { color: #b0b8c8; }
-  .pattern-note:focus { border-color: var(--gold) !important; background: #fffdf5; }
-
-  .pattern-entries {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    margin-bottom: 0.4rem;
-  }
-
-  .pattern-entry {
-    background: #f0f4fa;
-    border-radius: 6px;
-    padding: 0.45rem 0.75rem;
-    font-size: 0.82rem;
-    color: var(--text);
-    line-height: 1.65;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .pattern-entry-text { flex: 1; }
-
-  .pattern-entry-delete {
-    background: none;
-    border: none;
-    color: #ccc;
-    cursor: pointer;
-    font-size: 0.72rem;
-    padding: 0 3px;
-    flex-shrink: 0;
-    line-height: 1.8;
-    transition: color 0.15s;
-  }
-  .pattern-entry-delete:hover { color: var(--red); }
-
-  .pattern-note-row {
-    display: flex;
-    gap: 0.5rem;
-    align-items: flex-end;
-  }
-
-  .pattern-note-row .pattern-note {
-    flex: 1;
-    min-height: 44px;
-    margin: 0;
-  }
-
-  .pattern-note-save {
-    background: var(--gold);
-    border: none;
-    border-radius: 7px;
-    color: #0d0f14;
-    font-family: 'Cairo', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    padding: 0 0.9rem;
-    height: 44px;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: background 0.2s;
-    white-space: nowrap;
-  }
-  .pattern-note-save:hover { background: var(--gold-light); }
 
   .pattern-item:hover { border-color: #b0bcd0; }
   .pattern-item.destruction { border-right: 3px solid #f5b8b8; }
@@ -1302,9 +1212,592 @@
     .stats-row { gap: 0.5rem; }
     .stat-card { min-width: 100px; padding: 0.75rem; }
   }
+
+  /* =============================================
+     PANIC BUTTON & URGE SURFING OVERLAY
+     ============================================= */
+  .panic-float-btn {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e53935, #c62828);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    z-index: 150;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(229,57,53,0.45), 0 2px 8px rgba(0,0,0,0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: panic-pulse 2.5s ease infinite;
+  }
+  .panic-float-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 28px rgba(229,57,53,0.6), 0 2px 8px rgba(0,0,0,0.2);
+  }
+  @keyframes panic-pulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(229,57,53,0.45), 0 2px 8px rgba(0,0,0,0.15); }
+    50% { box-shadow: 0 4px 30px rgba(229,57,53,0.7), 0 2px 8px rgba(0,0,0,0.2); }
+  }
+
+  /* ---- PANIC OVERLAY — calm gradient ---- */
+  .panic-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(160deg, #0d2137 0%, #0a2e28 40%, #0d2538 100%);
+    z-index: 500;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2.5rem 1.5rem 3rem;
+    overflow-y: auto;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .panic-overlay.show {
+    display: flex;
+    animation: panicFadeIn 0.5s ease forwards;
+  }
+  @keyframes panicFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Subtle animated background blobs */
+  .panic-overlay::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 30%, rgba(56,189,180,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 70%, rgba(45,120,200,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 10%, rgba(100,200,160,0.08) 0%, transparent 50%);
+    pointer-events: none;
+    animation: blobShift 12s ease-in-out infinite alternate;
+  }
+  @keyframes blobShift {
+    0%   { opacity: 0.6; transform: scale(1)   translateY(0px); }
+    50%  { opacity: 0.9; transform: scale(1.04) translateY(-8px); }
+    100% { opacity: 0.6; transform: scale(1)   translateY(4px); }
+  }
+
+  .panic-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .panic-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+  }
+  .panic-badge {
+    display: inline-block;
+    background: rgba(56,189,180,0.15);
+    border: 1px solid rgba(56,189,180,0.35);
+    color: #5dd6ce;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    letter-spacing: 0.08em;
+  }
+  .panic-title {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.2rem, 4vw, 1.7rem);
+    color: rgba(255,255,255,0.92);
+    line-height: 1.9;
+    max-width: 560px;
+  }
+  .panic-subtitle {
+    color: rgba(255,255,255,0.4);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+
+  /* ---- TIMER ---- */
+  .urge-timer-container {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+  .urge-timer-label {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .urge-ring {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    margin: 0 auto 1rem;
+    filter: drop-shadow(0 0 18px rgba(56,189,180,0.25));
+  }
+  .urge-ring svg { transform: rotate(-90deg); }
+  .urge-ring-bg {
+    fill: none;
+    stroke: rgba(255,255,255,0.07);
+    stroke-width: 7;
+  }
+  .urge-ring-prog {
+    fill: none;
+    stroke: url(#timerGrad);
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-dasharray: 440;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+  }
+  .urge-time-display {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .urge-time-num {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.95);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .urge-time-suf {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    margin-top: 0.3rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ---- DYNAMIC MESSAGE BOX ---- */
+  .urge-msg-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    width: 100%;
+    min-height: 90px;
+    text-align: center;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .urge-msg-text {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    line-height: 1.95;
+    color: rgba(255,255,255,0.85);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .urge-msg-text.fade-out {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  .urge-msg-text.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .urge-msg-source {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.3);
+    margin-top: 0.5rem;
+    display: block;
+    font-family: 'Cairo', sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  /* ---- MEDIA BOX ---- */
+  .urge-media-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .urge-media-label {
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.3);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  #panicMediaContent {
+    color: rgba(255,255,255,0.45);
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+  #panicMediaContent a {
+    color: #64cfca;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  #panicMediaContent a:hover { text-decoration: underline; }
+
+  /* ---- BUTTONS ---- */
+  .urge-btns {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .urge-btn-close {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.5);
+    padding: 0.7rem 1.75rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+  .urge-btn-close:hover { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.25); }
+
+  /* =============================================
+     BACKUP STYLES
+     ============================================= */
+  .backup-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+  }
+  .btn-backup {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .btn-backup:hover { border-color: var(--gold); color: var(--gold); background: rgba(212,168,67,0.06); }
+  .btn-import { border-color: var(--green); color: var(--green); }
+  .btn-import:hover { background: rgba(46,158,91,0.08) !important; border-color: var(--green) !important; color: var(--green) !important; }
+
+  /* =============================================
+     QURAN TADABBUR SECTION
+     ============================================= */
+  .quran-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+  .quran-tab-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+  }
+  .quran-tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .quran-tab-content { display: none; }
+  .quran-tab-content.active { display: block; }
+
+  .ayah-card {
+    background: linear-gradient(135deg, #fff9ee, #fffdf7);
+    border: 1px solid #e8dfc8;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    transition: box-shadow 0.2s;
+  }
+  .ayah-card:hover { box-shadow: 0 4px 20px rgba(212,168,67,0.12); }
+  .ayah-card-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+    background: linear-gradient(135deg, #f5e6c3, #ede0c4);
+  }
+  .ayah-card-img-placeholder {
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(135deg, #fff5e0, #ffe8b0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: var(--gold);
+  }
+  .ayah-card-body { padding: 1.25rem 1.5rem; }
+  .ayah-card-ref {
+    font-size: 0.72rem;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+  .ayah-card-text {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    line-height: 2;
+    color: #7a5c1e;
+    margin-bottom: 1rem;
+    text-align: right;
+  }
+  .ayah-card-tadabbur-toggle {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.78rem;
+    transition: all 0.2s;
+    margin-bottom: 0.75rem;
+  }
+  .ayah-card-tadabbur-toggle:hover { border-color: var(--gold); color: var(--gold); }
+  .ayah-card-tadabbur {
+    display: none;
+    background: #fffbf0;
+    border: 1px solid rgba(212,168,67,0.25);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    font-size: 0.88rem;
+    line-height: 1.95;
+    color: var(--text-dim);
+    text-align: right;
+    margin-top: 0.5rem;
+  }
+  .ayah-card-tadabbur.open { display: block; }
+  .ayah-card-source {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 0.75rem;
+    font-style: italic;
+  }
+  .ayah-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid #f0e8d0;
+  }
+  .ayah-card-delete {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .ayah-card-delete:hover { color: var(--red); background: rgba(240,82,82,0.08); }
+
+  /* ADD AYAH MODAL */
+  .lib-sub-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    margin-top: 0.75rem;
+  }
+
+  /* =============================================
+     PRAYER TRACKER
+     ============================================= */
+  .prayer-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .prayer-day-label {
+    font-family: 'Amiri', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+  .prayer-day-date {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  .prayer-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+  .prayer-cell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .prayer-cell:hover { border-color: var(--gold); }
+  .prayer-cell.done {
+    background: #f0faf4;
+    border-color: #a8d5bc;
+  }
+  .prayer-cell.done .prayer-check { color: var(--green); }
+  .prayer-cell.late {
+    background: #fff9ee;
+    border-color: #e8dfc8;
+  }
+  .prayer-cell.late .prayer-check { color: var(--gold); }
+  .prayer-name { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .prayer-check { font-size: 1.2rem; }
+  .prayer-status-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+
+  .prayer-streak-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .prayer-streak-num {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--gold);
+  }
+  .prayer-streak-label { font-size: 0.8rem; color: var(--text-muted); }
+
+  .prayer-history {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .prayer-history-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+  .prayer-history-date { color: var(--text-dim); font-weight: 700; }
+  .prayer-history-dots { display: flex; gap: 0.3rem; }
+  .p-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .p-dot.done { background: var(--green); }
+  .p-dot.late { background: var(--gold); }
+
+  @media (max-width: 480px) {
+    .prayer-grid { grid-template-columns: repeat(3, 1fr); }
+    .panic-float-btn { bottom: 1rem; left: 1rem; width: 50px; height: 50px; font-size: 1.2rem; }
+  }
 </style>
 </head>
 <body>
+
+<!-- PANIC FLOATING BUTTON -->
+<button class="panic-float-btn" onclick="openPanicOverlay()" title="درع الطوارئ الفوري">🚨</button>
+
+<!-- URGE SURFING OVERLAY -->
+<div class="panic-overlay" id="panicOverlay">
+  <div class="panic-inner">
+
+    <div class="panic-header">
+      <div class="panic-badge">🌊 تقنية ركوب الموجة — Urge Surfing</div>
+      <div class="panic-title">الرغبة موجة — لها ذروة ثم تنتهي<br>لا تقاومها، فقط اركبها</div>
+      <div class="panic-subtitle">الرغبات تختفي خلال ١٠ دقائق إذا لم تستجب لها</div>
+    </div>
+
+    <div class="urge-timer-container">
+      <div class="urge-timer-label">⏱ الوقت المتبقي</div>
+      <div class="urge-ring">
+        <svg width="170" height="170" viewBox="0 0 170 170">
+          <defs>
+            <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="#38bdb4"/>
+              <stop offset="100%" stop-color="#4fc3f7"/>
+            </linearGradient>
+          </defs>
+          <circle class="urge-ring-bg" cx="85" cy="85" r="70"/>
+          <circle class="urge-ring-prog" id="urgeRingProg" cx="85" cy="85" r="70"/>
+        </svg>
+        <div class="urge-time-display">
+          <div class="urge-time-num" id="urgeTimerDisplay">10:00</div>
+          <div class="urge-time-suf">دقيقة</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dynamic rotating messages -->
+    <div class="urge-msg-box">
+      <div id="urgeMsgText" class="urge-msg-text fade-in">
+        اجلس بهدوء — لاحظ الإحساس بدون أن تتصرف بناءً عليه
+        <span class="urge-msg-source">تقنية Urge Surfing</span>
+      </div>
+    </div>
+
+    <!-- Media / rescue link -->
+    <div class="urge-media-box">
+      <div class="urge-media-label">🔗 مصدر دعمك</div>
+      <div id="panicMediaContent">
+        شغّل تلاوة قرآن، أو فيديو محفز، أو اقرأ "دوافع الأمل"
+        <br><span style="font-size:0.75rem;color:rgba(255,255,255,0.25);margin-top:0.3rem;display:block;">أضف رابطك في إعدادات صفحة الطوارئ</span>
+      </div>
+    </div>
+
+    <div class="urge-btns">
+      <button class="urge-btn-close" onclick="closePanicOverlay()">✕ أغلق الدرع</button>
+    </div>
+
+  </div>
+</div>
 
 <nav>
   <div class="nav-inner">
@@ -1313,16 +1806,27 @@
       <button class="nav-tab active" onclick="showSection('tracker')">📊 التقدم</button>
       <button class="nav-tab" onclick="showSection('morning')">🌅 صباحي</button>
       <button class="nav-tab" onclick="showSection('tasks')">✅ مهامي</button>
+      <button class="nav-tab" onclick="showSection('prayer')">🕌 الصلاة</button>
       <button class="nav-tab" onclick="showSection('shields')">🛡 الدروع</button>
       <button class="nav-tab" onclick="showSection('patterns')">🧠 الأنماط</button>
-      <button class="nav-tab" onclick="showSection('losses')">📜 الخسائر</button>
-      <button class="nav-tab" onclick="showSection('hope')">💛 الأمل</button>
       <button class="nav-tab" onclick="showSection('plan')">📋 الخطة</button>
+      <button class="nav-tab" onclick="showSection('hope')">💛 الأمل</button>
+      <button class="nav-tab" onclick="showSection('losses')">📜 الخسائر</button>
+      <button class="nav-tab" onclick="showSection('quran')">📖 القرآن</button>
       <button class="nav-tab" onclick="showSection('library')">📚 المكتبة</button>
-
     </div>
   </div>
 </nav>
+
+<!-- GLOBAL BACKUP BAR -->
+<div style="background:#f9fafb;border-bottom:1px solid var(--border);padding:0.4rem 2rem;">
+  <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;gap:0.75rem;justify-content:flex-end;flex-wrap:wrap;">
+    <span style="font-size:0.7rem;color:var(--text-muted);letter-spacing:0.04em;">💾 النسخ الاحتياطي</span>
+    <button class="btn-backup" onclick="exportData()">📤 تصدير البيانات</button>
+    <button class="btn-backup btn-import" onclick="document.getElementById('importFileInput').click()">📥 استيراد البيانات</button>
+    <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importData(this)">
+  </div>
+</div>
 
 <!-- AYAH BANNER — always visible -->
 <div class="ayah-banner">
@@ -1365,7 +1869,6 @@
       <div class="tracker-btns">
         <button class="btn btn-set" onclick="setStartDate()">📅 ابدأ من النهارده</button>
         <button class="btn btn-relapse" onclick="showRelapseModal()">↩ انتكسة</button>
-        <button class="btn btn-emergency" onclick="openEmergency()">🚨 خطر</button>
       </div>
 
       <!-- Mood Selector -->
@@ -1957,6 +2460,92 @@
     </div>
   </div>
 
+  <!-- QURAN TADABBUR -->
+  <div id="section-quran" class="section">
+    <div class="content-section">
+      <div class="content-header">
+        <h2>📖 تدبر القرآن الكريم</h2>
+        <p>آيات تتدبرها في رحلة تعافيك — اجعلها أنيسك</p>
+        <button class="btn btn-set" onclick="showAddAyahModal()" style="font-size:0.85rem;padding:0.5rem 1.2rem;margin-top:1rem;">＋ أضف آية للتدبر</button>
+      </div>
+
+      <!-- Built-in ayat -->
+      <div id="builtinAyatList">
+        <div class="ayah-card">
+          <div class="ayah-card-img-placeholder">📜</div>
+          <div class="ayah-card-body">
+            <div class="ayah-card-ref">سورة الزمر — الآية ٥٣</div>
+            <div class="ayah-card-text">قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا عَلَىٰ أَنفُسِهِمْ لَا تَقْنَطُوا مِن رَّحْمَةِ اللَّهِ ۚ إِنَّ اللَّهَ يَغْفِرُ الذُّنُوبَ جَمِيعًا ۚ إِنَّهُ هُوَ الْغَفُورُ الرَّحِيمُ</div>
+            <button class="ayah-card-tadabbur-toggle" onclick="toggleAyahTadabbur(this)">💡 التدبر والمعنى</button>
+            <div class="ayah-card-tadabbur">
+              <strong>التدبر:</strong> هذه الآية تخاطبنا نحن — المسرفين على أنفسنا. لم يقل "يا عبادي الصالحين" بل "يا عبادي الذين أسرفوا". رحمته سبحانه لا تُسبق بشرط الكمال، بل تتنزل على من يرجع. القنوط هو الذنب الثاني — اليأس من رحمة الله. الله يغفر الذنوب جميعًا — لا استثناء لكبيرة، ولا حد لمغفرته.
+              <div class="ayah-card-source">— تأمل شخصي في رحلة التعافي</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ayah-card">
+          <div class="ayah-card-img-placeholder">📜</div>
+          <div class="ayah-card-body">
+            <div class="ayah-card-ref">سورة الشرح — الآيات ٥-٦</div>
+            <div class="ayah-card-text">فَإِنَّ مَعَ الْعُسْرِ يُسْرًا ۝ إِنَّ مَعَ الْعُسْرِ يُسْرًا</div>
+            <button class="ayah-card-tadabbur-toggle" onclick="toggleAyahTadabbur(this)">💡 التدبر والمعنى</button>
+            <div class="ayah-card-tadabbur">
+              <strong>التدبر:</strong> "معَ" — لاحظ الحرف. لم يقل بعد العسر، بل معه. في صميم أصعب اللحظة، اليسر موجود بجوارها. وكررها مرتين: لأن العسر واحد (بـ"ال")، واليسر اثنان (نكرة متكررة). أي إن أصعب لحظة واحدة في حياتك تحمل بداخلها يُسرين.
+              <div class="ayah-card-source">— من تدبرات ابن القيم رحمه الله</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom ayat -->
+      <div id="customAyatList"></div>
+
+      <div id="ayatEmpty" style="text-align:center;padding:2rem 1rem;color:var(--text-muted);display:none;">
+        <div style="font-size:2rem;margin-bottom:0.75rem;">📖</div>
+        <div style="font-size:0.9rem;">أضف الآيات التي تعني لك الكثير في رحلتك</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRAYER TRACKER -->
+  <div id="section-prayer" class="section">
+    <div class="content-section">
+      <div class="content-header">
+        <h2>🕌 متابعة الصلاة</h2>
+        <p>الصلاة عمود الدين — تابع محافظتك عليها يوميًا</p>
+      </div>
+
+      <div class="prayer-day-header">
+        <div class="prayer-day-label" id="prayerTodayLabel">صلوات اليوم</div>
+        <div class="prayer-day-date" id="prayerTodayDate">—</div>
+      </div>
+
+      <div class="prayer-grid" id="prayerGrid">
+        <!-- Generated by JS -->
+      </div>
+
+      <div style="display:flex;gap:0.5rem;justify-content:center;margin-bottom:1.5rem;flex-wrap:wrap;">
+        <button class="btn btn-set" onclick="savePrayerDay()" style="font-size:0.85rem;padding:0.5rem 1.2rem;">💾 حفظ يوم الصلاة</button>
+        <button class="btn-reset-morning" onclick="resetPrayerDay()">🔄 إعادة تعيين اليوم</button>
+      </div>
+
+      <div class="prayer-streak-box">
+        <div class="prayer-streak-num" id="prayerStreakNum">0</div>
+        <div class="prayer-streak-label">أيام متتالية بصلاة كاملة ✅</div>
+      </div>
+
+      <div style="font-weight:700;color:var(--text-dim);font-size:0.78rem;letter-spacing:0.08em;margin-bottom:0.75rem;text-transform:uppercase;">📅 السجل السابق</div>
+      <div class="prayer-history" id="prayerHistory">
+        <!-- Generated by JS -->
+      </div>
+
+      <div id="prayerHistoryEmpty" style="text-align:center;padding:2rem;color:var(--text-muted);font-size:0.88rem;">
+        لم تسجّل أيامًا بعد — ابدأ اليوم 🤲
+      </div>
+    </div>
+  </div>
+
   <!-- EMERGENCY -->
   <div id="section-emergency" class="section">
     <div class="emergency-page">
@@ -2065,6 +2654,29 @@
     <div class="modal-btns">
       <button class="btn-confirm-relapse" onclick="confirmRelapse()">نعم، أعد العداد من الصفر</button>
       <button class="btn-cancel" onclick="closeRelapseModal()">رجوع</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD AYAH MODAL -->
+<div class="modal-overlay" id="addAyahModal">
+  <div class="modal" style="text-align:right;max-width:580px;">
+    <h3>📖 إضافة آية للتدبر</h3>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1rem;">
+      <div class="lib-sub-label">المرجع (السورة والآية)</div>
+      <input id="ayahRefInput" placeholder='مثلاً: "سورة البقرة — الآية ١٥٣"' style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.9rem;outline:none;direction:rtl;">
+      <div class="lib-sub-label">نص الآية</div>
+      <textarea id="ayahTextInput" placeholder="اكتب نص الآية هنا..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Amiri',serif;font-size:1rem;min-height:90px;resize:vertical;outline:none;direction:rtl;line-height:2;"></textarea>
+      <div class="lib-sub-label">التدبر والمعنى</div>
+      <textarea id="ayahTadabburInput" placeholder="أكتب تدبرك وما استفدته من هذه الآية..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;min-height:100px;resize:vertical;outline:none;direction:rtl;"></textarea>
+      <div class="lib-sub-label">المصدر (اختياري)</div>
+      <input id="ayahSourceInput" placeholder='مثلاً: "من تدبرات ابن القيم" أو "تأمل شخصي"' style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;outline:none;direction:rtl;">
+      <div class="lib-sub-label">رابط صورة الآية (اختياري)</div>
+      <input id="ayahImgInput" placeholder="https://..." style="width:100%;background:#F5F5F5;border:1px solid #DDE3ED;border-radius:8px;padding:0.65rem 0.9rem;color:#333;font-family:'Cairo',sans-serif;font-size:0.85rem;outline:none;direction:ltr;">
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-set" onclick="saveAyah()">💾 حفظ الآية</button>
+      <button class="btn-cancel" onclick="closeAddAyahModal()">إلغاء</button>
     </div>
   </div>
 </div>
@@ -2189,6 +2801,8 @@
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
     document.getElementById('section-emergency').classList.add('active');
+    const emergencyTab = document.querySelector('.emergency-tab');
+    if (emergencyTab) emergencyTab.classList.add('active');
     loadEmergencyContent();
   }
 
@@ -2426,66 +3040,13 @@
   }
 
   function makePatternEl(text, num, type, isCustom, customIndex) {
-    const entriesKey = `pattern_entries_${type}_${num}`;
     const div = document.createElement('div');
     div.className = `pattern-item ${type}${isCustom ? ' custom' : ''}`;
-
-    function getEntries() {
-      return JSON.parse(localStorage.getItem(entriesKey) || '[]');
-    }
-    function saveEntries(arr) {
-      localStorage.setItem(entriesKey, JSON.stringify(arr));
-    }
-    function renderEntries() {
-      const list = div.querySelector('.pattern-entries');
-      const entries = getEntries();
-      list.innerHTML = entries.map((e, i) => `
-        <div class="pattern-entry">
-          <span class="pattern-entry-text">${e}</span>
-          <button class="pattern-entry-delete" onclick="(function(){
-            const arr = JSON.parse(localStorage.getItem('${entriesKey}') || '[]');
-            arr.splice(${i}, 1);
-            localStorage.setItem('${entriesKey}', JSON.stringify(arr));
-            const items = document.querySelectorAll('.pattern-item');
-            items.forEach(el => { if(el.dataset.ekey === '${entriesKey}') el.querySelector('.pattern-entries') && renderEntriesFor(el, '${entriesKey}'); });
-          })()">✕</button>
-        </div>`).join('');
-    }
-
-    div.dataset.ekey = entriesKey;
     div.innerHTML = `
-      <div class="pattern-item-top">
-        <span class="pattern-num">${num}</span>
-        <span class="pattern-text">${isCustom ? '<span class="pattern-badge">جديد</span>' : ''}${text}</span>
-        ${isCustom ? `<button class="pattern-delete" onclick="deletePattern('${type}',${customIndex})" title="حذف">✕</button>` : ''}
-      </div>
-      <div class="pattern-entries"></div>
-      <div class="pattern-note-row">
-        <textarea class="pattern-note" placeholder="بيجيلك في شكل إيه؟ اكتب هنا..."></textarea>
-        <button class="pattern-note-save">＋ إضافة</button>
-      </div>
+      <span class="pattern-num">${num}</span>
+      <span class="pattern-text">${isCustom ? '<span class="pattern-badge">جديد</span>' : ''}${text}</span>
+      ${isCustom ? `<button class="pattern-delete" onclick="deletePattern('${type}',${customIndex})" title="حذف">✕</button>` : ''}
     `;
-
-    renderEntries();
-
-    div.querySelector('.pattern-note-save').addEventListener('click', () => {
-      const ta = div.querySelector('.pattern-note');
-      const val = ta.value.trim();
-      if (!val) return;
-      const arr = getEntries();
-      arr.push(val);
-      saveEntries(arr);
-      ta.value = '';
-      renderEntries();
-    });
-
-    div.querySelector('.pattern-note').addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        div.querySelector('.pattern-note-save').click();
-      }
-    });
-
     return div;
   }
 
@@ -2527,116 +3088,50 @@
   // ALLAH'S NAMES
   // =============================================
   const ALLAH_NAMES = [
-    { name: 'الرحمن', meaning: 'ذو الرحمة الواسعة', explain: 'الرحمن — اسم يُبهج القلب مجرد سماعه. رحمانيته سبقت الخلق كله، قبل أن تُخلق كانت رحمته معدّة ومُهيأة لك. كل نفَس تتنفسه بلا جهد، وكل صحوة من نوم، وكل قلب ينبض — هي لمسات متتالية من الرحمن. لم تطلب هذه الرحمة، ولم تكسبها، ولم تستحقها — بل أُعطيت لك هبةً خالصة. يومك اليوم، مهما كان ثقيلًا، محاط برحمة واسعة لا تراها لكنها موجودة في كل تفصيلة من تفاصيل حياتك.' },
-    { name: 'الرحيم', meaning: 'دائم الرحمة بالمؤمنين', explain: 'الرحيم خاصة بالمؤمنين — وأنت منهم ما دام قلبك يُقرّ بذلك. الرحمن رحمة عامة للجميع، أما الرحيم فهي رحمة مخصوصة لك أنت. كل مرة قاومت فيها وانتصرت — هو الرحيم يُسدّدك. وكل مرة سقطت ثم قمت — هو الرحيم يرفعك. رحمته بك لا تنقطع في الشدة ولا في اللين، لا في القوة ولا في الضعف. ثق أن الرحيم لا يتخلى عن مَن آمن به حتى وهو في أحلك لحظاته.' },
-    { name: 'الملك', meaning: 'المالك لكل شيء', explain: 'الملك — مالك الملك الحقيقي، لا تزول ملكيته ولا تُنتزع. كل ما يقلقك اليوم — صحتك، مستقبلك، رزقك، علاقاتك — هو يملكها ويملك مفاتيحها. والملك الحقيقي لا يترك رعاياه في حيرة أو ضياع دون سبب. حين تشعر أن الأمور خارج سيطرتك، تذكّر أنها في يد مَن يملكها حقًا. الاستراحة في ظل الملك أن تعلم أن المسؤول عنك هو الملك وحده.' },
-    { name: 'القدوس', meaning: 'المنزّه عن كل نقص', explain: 'القدوس — منزّه تنزيهًا كاملًا عن كل عيب أو نقص أو ظلم. قدسيته تعني أنه لا يمكن أن يظلمك أبدًا، لأن الظلم نقص وهو منزّه عن كل نقص. ما تحسه من ألم أو غياب عدل في حياتك — هو يراه ويعلمه. والقدوس لا يُضيع شيئًا ولا يُهمل أحدًا. نقاؤه المطلق يوحي لك أن النقاء ممكن — لأنه خلقك على فطرة نقية وأحبّ النقاء.' },
-    { name: 'السلام', meaning: 'مصدر السلام الحقيقي', explain: 'السلام — هو المصدر الوحيد للسلام الحقيقي في هذا الوجود. كل السلام الذي تبحث عنه في الملذات أو الهروب أو التعلق بالناس — هو انعكاس ضعيف لسلامه. السلام الحقيقي لا يأتي من إشباع الشهوة، بل يأتي حين تسكن في قُرب السلام نفسه. قلبك الذي يضطرب ويتقلّب — يجد هدوءه فقط حين يرجع لمصدر السلام. "ألا بذكر الله تطمئن القلوب."' },
-    { name: 'المؤمن', meaning: 'يؤمّن عباده من خوفهم', explain: 'المؤمن — يمنح الأمان الحقيقي لمن لجأ إليه. ليس أمانًا زائفًا يدوم لحظة ثم يزول، بل أمان حقيقي يُسكّن القلب ويثبّت القدم. في لحظات الخوف من المستقبل والقلق من المجهول، الجأ لمن بيده الأمان الحقيقي. المؤمن لعباده كالحِصن — مَن دخله أَمِن. وأنت حين تلجأ إليه في خضم صراعك، تجد أمانًا لا يُشتريه بمال ولا يُوهبه إنسان.' },
-    { name: 'المهيمن', meaning: 'الرقيب الحافظ على كل شيء', explain: 'المهيمن — رقيب وحافظ وشاهد على كل شيء في وقت واحد. هيمنته الكاملة تعني أنه يُحيط بكل شيء يخصّك — لا شيء يفوته ولا شيء يصلك إلا بإذنه. هذا يعني أن ما مررت به من محن وصراعات — كلها تحت هيمنته وبإذنه. ليس غفلة منه، بل تدبير منه لمصلحتك. والأمان الحقيقي أن تعيش تحت هيمنة مَن يُحيط بكل شيء ولا يغيب عنه شيء.' },
-    { name: 'العزيز', meaning: 'الغالب الذي لا يُقهر', explain: 'العزيز — الغالب الذي لا يُقهر، القوي الذي لا يُهزم. عزّته مطلقة لا يشاركه فيها أحد. ومن جميل هذا الاسم أن مَن يلجأ إليه يتعزّز بعزّته. ضعفك أمامه ليس عيبًا — بل هو مدخل للاستمداد من عزّته. قوتك الحقيقية تأتي من قربك منه لا من نفسك. فاستعن بعزيز لا يُغلب، واتكئ على قوة لا تنضب.' },
-    { name: 'الجبار', meaning: 'يجبر الكسر ويصلح الضعف', explain: 'الجبار — يجبر الكسر بمعنى يُصلحه ويُكمله. ليس فقط جبار بقوته، بل جبار لقلوب عباده المكسورة. قلبك المكسور من تراكم الذنوب والسقوط المتكرر، وإرادتك المتعبة من الصراع الطويل — الجبار يُعيد بناءها. لو وقفت بين يديه بانكسار حقيقي وقلت "أنا مكسور يا ربي" — الجبار يجبر. هذا وعد في اسمه. وجبره أعظم من كل كسر.' },
-    { name: 'المتكبر', meaning: 'المتعالي فوق كل شيء', explain: 'المتكبر — الكبرياء حقه وحده، لأنه وحده المستحق لها. وكبرياؤه المطلق يعني أن كل شيء دونه صغير — همومك صغيرة، إغراءاتك صغيرة، خوفك صغير. حين تقيس أمورك بمقياس المتكبر، تجد أن ما كان يبدو جبلًا أصبح حصاةً. والإنسان الذي يتكبّر على نفسه فلا يُذعن لضعفه — يكسر نفسه. أما مَن يتواضع للمتكبر فقط — فيجد نفسه في المكان الصحيح.' },
-    { name: 'الخالق', meaning: 'خالق كل شيء من عدم', explain: 'الخالق — أوجد من لا شيء. خلقك أنت من عدم، وخلق في داخلك طاقة وقدرة وفطرة نقية. والخالق قادر أن يخلق فيك إنسانًا جديدًا كلما رجعت إليه بصدق. التغيير ليس مستحيلًا لأن الخالق معك. ربما تقول "لن أتغيّر" — لكن الخالق الذي خلقك من عدم قادر أن يخلق منك عبدًا جديدًا. البداية الحقيقية دائمًا ممكنة مع الخالق.' },
-    { name: 'البارئ', meaning: 'يُبرئ ويفصل الأشياء بدقة', explain: 'البارئ — برأ خلق كل شيء بدقة مُحكمة، فصل الأشياء وميّزها. وهو الذي يعرف تركيبتك النفسية والجسدية أكثر من أي طبيب أو معالج. ولأنه يعرف تركيبتك بدقة — هو قادر أن يُبريك مما تعاني منه بطريقة لا يقدر عليها غيره. البُرء من الإدمان والتعلق والضعف — ليس مستحيلًا، بل هو في يد البارئ الذي يعلم كيف خُلقت.' },
-    { name: 'المصوّر', meaning: 'يُعطي كل شيء صورته وشكله', explain: 'المصوّر — هو الذي أعطاك صورتك وشكلك وهيئتك. صوّرك في أحسن تقويم ليس مصادفة — بل اختيار من المصوّر الحكيم. الصورة التي تراها لنفسك الآن حين تقع وتضعف وتخطئ — ليست الصورة الكاملة. المصوّر يرى فيك ما لا تراه أنت، يرى الإنسان الذي يمكن أن تكون. لا تُصغّر نفسك بنظرتك، فالمصوّر رآها بصورة أكمل وأجمل.' },
-    { name: 'الغفار', meaning: 'يغفر مرة بعد مرة', explain: 'الغفار — صيغة المبالغة في المغفرة. ليس غافرًا مرة أو مرتين، بل غفّار — يغفر ويغفر ويغفر. مهما تكررت عودتك بذنب جديد، وجدت الغفار أمامك. الغفران عنده لا يحتاج رصيدًا ولا رأس مال من الأعمال الصالحة — يحتاج فقط رجوعًا صادقًا. لا تيأس من رحمته مهما تكررت النكسات، لأن الغفار لم يضع حدًا لغفرانه.' },
-    { name: 'القهار', meaning: 'يقهر كل شيء بقدرته', explain: 'القهار — قاهر كل شيء بقدرته المطلقة، لا يعجزه شيء ولا يفلت منه شيء. والشيطان الذي يُوسوس لك، والشهوة التي تُربكك، والنفس الأمّارة التي تجرّك — كلها تحت قهر القهار. لو استعنت به حقًا ولجأت إليه، قوته فيك أعظم بكثير من قوة عدوك. "لا حول ولا قوة إلا بالله" — هي طلب من القهار أن يقهر بك ما يُعجزك.' },
-    { name: 'الوهاب', meaning: 'يهب بلا مقابل ولا حساب', explain: 'الوهاب — يهب هِبة خالصة بلا ثمن ولا مقابل ولا منّة. ليس كالناس الذين يُعطون ثم يُذكّرون. الوهاب يُعطي لأن العطاء طبيعته — لا لأنك استحققت. الإرادة التي تحتاجها، والثبات الذي تفتقره، والقوة التي تطلبها — كلها هِبات يُعطيها الوهاب لمن سأله بصدق. اطلب منه اليوم هبة الثبات وهبة الإرادة وهبة القلب المُنيب.' },
-    { name: 'الرزاق', meaning: 'يرزق كل شيء', explain: 'الرزاق — يرزق كل مخلوق برزقه المكتوب دون نقصان. ورزقك مكتوب في اللوح المحفوظ، ما نقص منه شيء ولن يأكله أحد غيرك. لكن الرزق ليس المال فقط — منه رزق الإرادة، ورزق القوة، ورزق الصبر على المقاومة. اطلب من الرزاق أن يرزقك قوة تتجاوز بها لحظة ضعفك، وثباتًا يُمكّنك من المضي في رحلتك.' },
-    { name: 'الفتاح', meaning: 'يفتح أبواب الرحمة والرزق', explain: 'الفتاح — يفتح الأبواب المُغلقة ويُزيل الحواجز، بيده مفاتيح كل شيء. كل باب أُغلق في وجهك — من فرصة أو علاقة أو طريق — هو الفتاح يفتح غيره في الوقت المناسب. وربما ما ظننته إغلاقًا كان توجيهًا نحو باب أفضل. لا تستسلم حين تُغلق الأبواب — الفتاح لم يُغلق عليك كل الأبواب. ادعه: "اللهم افتح لي أبواب رحمتك."' },
-    { name: 'العليم', meaning: 'يعلم كل شيء', explain: 'العليم — علمه مطلق لا حدود له، يعلم ما كان وما يكون وما لم يكن لو كان كيف يكون. يعلم ما في قلبك أكثر مما تعلم أنت عن نفسك. يعلم ألمك الحقيقي خلف الذنب، ويعلم صراعك الداخلي الذي لا يراه أحد، ويعلم نيّتك الصادقة في التغيير. ولأنه يعلم كل هذا — حكمه عليك رحيم ودقيق لا مجحف. لا تخف أن "يكتشف" شيئًا — هو عالم وغافر.' },
-    { name: 'القابض', meaning: 'يقبض الأرواح والأرزاق بحكمة', explain: 'القابض — يقبض بحكمة لا بقسوة. حين يُضيّق عليك في الرزق أو الصحة أو الفرج — فيه حكمة لا تراها الآن. القبض والبسط بيده، وكلاهما رحمة مُدبَّرة لمصلحتك وإن اختلفت الصورة. ربما يقبض عنك شيئًا لأن فيه ضررًا لم تره، أو ليُعلّمك أن تطلب منه وتلجأ إليه. القبض ليس عقابًا — بل أحيانًا هو أعمق صور الرعاية.' },
-    { name: 'الباسط', meaning: 'يبسط الرزق والرحمة', explain: 'الباسط — يبسط الرزق والرحمة على مَن يشاء بحكمته. وبعد كل قبض يأتي البسط لمَن صبر وثبت. الباسط يفتح لك أفقًا لم تره وأنت في ضيقك. لو صبرت على لحظات الضيق والتضييق، تجد الباسط يفتح عليك بسطًا لا تتخيله. الفرج آتٍ — لأن الباسط موجود، وسنّته أن البسط يعقب القبض.' },
-    { name: 'الخافض', meaning: 'يخفض من يشاء بعدله', explain: 'الخافض — يخفض مَن تكبّر وطغى وبغى بعدله المطلق. وهذا يُعطيك ثقةً أن الظالمين لن يبقوا في علوّهم إلى الأبد. الخافض يُذكّرك أيضًا أن الغرور والتكبّر مُهلكان — فالتواضع لله ليس ضعفًا بل حكمة. مَن تواضع لله رفعه، ومَن تكبّر خفضه. اختر التواضع — لأن الخافض والرافع واحد.' },
-    { name: 'الرافع', meaning: 'يرفع من يشاء بفضله', explain: 'الرافع — يرفع مَن تواضع وأخلص وصبر. الرفعة الحقيقية ليست في المال أو المنصب — بل في الرفعة عند الله. رحلتك في التعافي رفعة — حتى لو لا يراها أحد الآن، حتى لو لم تُشفَق عليك. كل يوم تصمد فيه هو يوم رفعة عند الرافع. والرافع لا يُضيع مَن رفعه — يُثبّته ويُعليه في الدارين.' },
-    { name: 'المعز', meaning: 'يُعز من يشاء', explain: 'المعز — العزة بيده يؤتيها مَن يشاء. العزة الحقيقية التي يطلبها الناس في ثروة أو مكانة أو قبول — لا توجد إلا عنده. ومَن أعزّه الله لا يذله أحد مهما حاول. لو شعرت بالذل والانكسار من نفسك ومن الناس — ارجع للمعز. اطلب منه عزّة تُغنيك عن ذل المعصية وذل الحاجة لغير الله.' },
-    { name: 'المذل', meaning: 'يُذل من يشاء بحكمة وعدل', explain: 'المذل — يُذل مَن استحق الذل بظلمه أو طغيانه أو كفره. وهذا يُريح قلبك من حمل الضغينة على مَن آذاك — فالمذل يتولى أمرهم. لكن هناك درس أعمق: الذل الحقيقي هو ذل المعصية وذل الشهوة. حين تنصاع للشهوة فأنت تقبل ذلًا — والعزة في طاعة الله.' },
-    { name: 'السميع', meaning: 'يسمع كل شيء', explain: 'السميع — يسمع كل شيء في كل وقت في كل مكان. كل دعاء، كل همسة، كل استغاثة ترتفع في الظلام حين لا يسمعك أحد — السميع يسمعها. لا تصمت في لحظة الضعف ظنًا أن أحدًا لا يسمع — السميع هناك. ناده بصوت مرتفع أو بهمسة داخلية — سواء. السميع لا يحتاج مكبّر صوت ولا كلمات فصيحة. يحتاج فقط قلبًا صادقًا.' },
-    { name: 'البصير', meaning: 'يرى كل شيء', explain: 'البصير — يرى كل شيء برؤية كاملة لا تحجبها حجب. يرى صراعك الداخلي الذي لا يراه أحد من البشر. يرى المرة التي أردت الخطأ فمنعت نفسك — ولم يعلم بها أحد. يرى الدمعة الخفية في ليل طويل. ويرى كل لحظة صمود مهما صغرت. ولأنه يرى كل هذا — يُثيب على ما لا يراه الناس. لا شيء يضيع من عين البصير.' },
-    { name: 'الحكم', meaning: 'الحاكم العادل', explain: 'الحكم — الحاكم العادل الذي لا تُردّ أحكامه ولا تُظلم. حكمه عادل دائمًا مهما بدا خلاف ذلك لعيوننا القاصرة. ما تحسه من ظلم في حياتك — هو يراه ويحكم فيه. وكل حكم يصدر عليك أو لك — مرتبط بحكمه العادل. الاطمئنان للحكم يُريح القلب من قلق "هل سيُنصف لي؟" — نعم، الحكم ينصف.' },
-    { name: 'العدل', meaning: 'البالغ في العدل', explain: 'العدل — عدله مطلق لا يميل ولا يتحيّز. العدل الكامل الذي تبحث عنه في الدنيا ولا تجده — هو عنده. ما فاتك في الدنيا من حق، ما أُخذ منك بغير وجه حق، ما ظُلمت فيه ولم يُنصفك أحد — لن يفوتك عنده. هذا اليقين يُريح القلب من ثقل الغضب والضغينة. أسلم الأمر للعدل — وهو كافٍ.' },
-    { name: 'اللطيف', meaning: 'يصل لطفه لكل شيء خفي', explain: 'اللطيف — يصل لطفه لأدق الأشياء وأخفاها، يُدبّر الأمور من حيث لا ترى ولا تحتسب. أحيانًا تمر أيام وأسابيع وتحس أن ربنا بعيد وأن الدعاء لا يُجاب — لكنه اللطيف يعمل في الخفاء لمصلحتك بطرق لا تخطر على بالك. ستنظر يومًا للوراء وتقول: "سبحان الله، كيف دبّر اللطيف كل هذا." ثق في لطفه الخفي حتى حين لا تراه.' },
-    { name: 'الخبير', meaning: 'يعلم خفايا الأمور', explain: 'الخبير — يعلم خفايا الأمور وبواطنها، لا تخفى عليه خافية في السماوات ولا في الأرض ولا في النفوس. يعرف تفاصيل نفسك الداخلية — لماذا تقع، ما الذي يُضعفك، ما الجرح القديم خلف السلوك. وعلمه الكامل بك لم يجعله ييأس منك أو يُقرّر التخلي عنك. فكيف تيأس أنت من نفسك وهو العالم بكل شيء لم ييأس؟' },
-    { name: 'الحليم', meaning: 'لا يعجل بالعقوبة', explain: 'الحليم — لا يعجل بالعقوبة ويُمهل كثيرًا. حلمه عليك وأنت في أحلك لحظاتك وأكثرها بُعدًا عنه — هو لطف عميق منه. لو كان غير حليم لعاجلنا بالعقوبة فور الخطأ. لكنه يُمهل لأنه يُريد أن تُتاح لك فرصة الرجوع. حلمه ليس غفلة عنك — بل هو احتساب لعودتك وحبًا لرؤيتك تتوب. لا تستغل حلمه — ولكن ثق أنه موجود.' },
-    { name: 'العظيم', meaning: 'بالغ العظمة', explain: 'العظيم — عظمته لا يحيط بها عقل ولا يصفها لسان. وقوف العقل أمام عظمته يُذيب كل تضخيم للمشاكل. حين تضع همومك أمام العظيم، تجدها تتضاءل وتصغر. جبلك صغير أمام عظمته. معركتك محدودة أمام قدرته. قِف لحظة في خشوع أمام العظيم — وستجد أن ما كان يُرعبك أصبح أصغر مما كنت تظن.' },
-    { name: 'الغفور', meaning: 'يغفر الذنوب كلها', explain: 'الغفور — يغفر الذنوب كلها ومهما عظمت. الغفور يمحو لا يستر فقط — يمحو الذنب من السجل كأنه ما وُجد قط. وغفرانه لا يتوقف على حجم الذنب ولا على عدد مرات الوقوع، بل على صدق الرجوع. "قل يا عبادي الذين أسرفوا على أنفسهم لا تقنطوا من رحمة الله إن الله يغفر الذنوب جميعًا" — هذه الآية لك أنت.' },
-    { name: 'الشكور', meaning: 'يُثيب على القليل كثيرًا', explain: 'الشكور — يشكر القليل ويُثيب عليه كثيرًا. هو الذي يشكر عبده على طاعته مع أن الطاعة حق له أصلًا — وهذا من كرمه. كل خطوة صغيرة تخطوها نحو الطهر والتعافي، هو يشكرها ويُثيب عليها. مقاومتك دقيقة واحدة — يراها. إعراضك عن إغراء — يُثيب عليه. الشكور لا يُضيع جهدًا مهما صغر.' },
-    { name: 'العلي', meaning: 'المتعالي فوق كل شيء', explain: 'العلي — متعالٍ فوق كل شيء بذاته وقدره وشأنه. علوّه يعني أنه فوق كل ما يخيفك ويُرعبك. الشيطان تحته، الشهوة تحته، المرض والفقر والخوف — كلها تحته. حين تلجأ للعلي، تضع نفسك تحت حماية مَن هو فوق كل عدو. الجأ للعلي في أصعب لحظاتك واطمئن — لأنك تحت رعاية مَن لا يعلوه شيء.' },
-    { name: 'الكبير', meaning: 'الكبير في ذاته وصفاته', explain: 'الكبير — كبير في ذاته وصفاته وأفعاله، لا يُحيط به وصف. كبرياؤه يُصغّر كل ما يقلقك ويُكبّره وهمك. ضع مشكلتك أمام الكبير — وستراها صغيرة حقًا. إغراؤك الذي يبدو جبلًا — صغير أمام الكبير. ضعفك الذي يبدو لا نهاية له — صغير أمام قدرة الكبير على تغييرك. كل شيء يتضاءل أمام الكبير.' },
-    { name: 'الحفيظ', meaning: 'يحفظ كل شيء', explain: 'الحفيظ — يحفظ كل شيء بعلمه وقدرته. يحفظ أعمالك التي لم يعلم بها أحد، ويحفظ نياتك الصادقة التي لم تترجمها لأفعال بعد، ويحفظ لحظات صمودك التي مرّت دون أن يراها أحد. وكل هذا المحفوظ عنده محفوظ ليومٍ تُقابله فيه وتجد أن الحفيظ لم يُضيّع منه شيئًا.' },
-    { name: 'المقيت', meaning: 'يُقيت كل مخلوق ويُمده', explain: 'المقيت — يُمدّ كل مخلوق بما يحتاجه ليبقى ويستمر. والقوت ليس الطعام فقط — بل قوت الروح والإرادة والصبر. في رحلتك هذه تحتاج قوتًا خاصًا — قوت الثبات وقوت المقاومة. المقيت يعلم ما تحتاجه ويُمدّك به حين تطلب وحين تتوكل عليه. اطلب منه أن يمدّك بما تحتاجه لتستمر.' },
-    { name: 'الحسيب', meaning: 'يكفي ويُحاسب بدقة', explain: 'الحسيب — يكفي مَن توكّل عليه ويُحاسب بدقة متناهية لا تُخطئ ولا تجور. "حسبنا الله ونعم الوكيل" — كلمة قالها إبراهيم حين أُلقي في النار فكانت النار بردًا وسلامًا. الحسيب يكفيك ما أهمّك إن أسلمت أمرك إليه. وحسابه الدقيق يعني أنك ستجد كل صغيرة وكبيرة محفوظة — من خير وشر.' },
-    { name: 'الجليل', meaning: 'ذو الجلال والعظمة', explain: 'الجليل — ذو الجلال الذي يملأ القلب هيبةً ومحبةً في آنٍ واحد. الوقوف بين يديه في صلاة خاشعة أو في دعاء صادق — يُغير شيئًا عميقًا في الداخل. جلاله يجعل كل ما سواه يتضاءل. حين تشعر بجلال الله في لحظة صادقة، تجد أن الشهوة التي كانت تبدو كل شيء أصبحت لا شيء أمام جلاله.' },
-    { name: 'الكريم', meaning: 'واسع العطاء والجود', explain: 'الكريم — كرمه مطلق لا يتوقف على استحقاقك ولا على رصيدك من الأعمال. الكريم يُعطي بلا حساب ولا منّ ولا تذكير. كل نعمة في حياتك هي من كريم لم يبخل. وكرمه في الآخرة أعظم مما تتخيل. اطلب منه اليوم بلا تردد ولا استحياء — الكريم يُحب أن يُعطي، ويحب أن يُسأل.' },
-    { name: 'الرقيب', meaning: 'يراقب كل شيء دائمًا', explain: 'الرقيب — مراقبته دائمة كاملة لا تنقطع. لكن رقابته ليست رقابة الشرطي الذي ينتظر الخطأ — بل رقابة الحبيب الذي يهتم. مَن يراقبك بهذه الدقة والاستمرار يُحبك بهذا القدر. رقابته دافع للتجمّل والإحسان — لأنك لست وحدك أبدًا. "أنت ترانا يا ربّ" — جملة تُغيّر كيف تعيش.' },
-    { name: 'المجيب', meaning: 'يجيب دعاء من دعاه', explain: 'المجيب — وعد بالإجابة وعدًا صريحًا: "ادعوني أستجب لكم". كل دعاء ترفعه — المجيب يسمعه ويُجيبه. قد يجيب بعين ما طلبت، أو بدفع بلاء لم تره، أو بتأجير في الآخرة. لكنه لا يُهمل أبدًا مَن ناداه بصدق. لا تتوقف عن الدعاء ظنًا أنه لا يُجاب — المجيب أصدق من أن يُخلف وعده.' },
-    { name: 'الواسع', meaning: 'رحمته وعلمه يسع كل شيء', explain: 'الواسع — سعته لا حدود لها في العلم والرحمة والقدرة والعطاء. مهما بلغ ذنبك فرحمته أوسع. مهما عظم همّك فقدرته أوسع. مهما كثر طلبك فعطاؤه أوسع. الواسع لا يضيق — فلا تظن أنك وصلت لحد لا يتجاوزه فضله. الوسعة صفته، والضيق لا يكون إلا حين تبتعد عنه.' },
-    { name: 'الحكيم', meaning: 'يضع كل شيء في موضعه الصحيح', explain: 'الحكيم — يضع كل شيء في موضعه الصحيح بحكمة بالغة لا يُدركها العقل البشري القاصر. كل ما يحدث في حياتك — المؤلم والمفرح، المفقود والموجود — فيه حكمة من الحكيم. ربما ترى اليوم ما تظنه خطأً في التدبير — وتكتشف بعد سنوات أنه كان أحكم شيء حدث لك. ثق في الحكيم حين لا تفهم.' },
-    { name: 'الودود', meaning: 'يحب عباده ويُحبّه العباد', explain: 'الودود — محبته عميقة دافئة ثابتة. يحبك ليس لأنك كامل ولا لأنك لم تُخطئ — بل لأنه اختار أن يُحب ومحبته لا تتوقف على أفعالك. الودود يُحب عبده حتى وهو يُذنب — ويفرح بعودته. تخيّل أن وراءك محبة إلهية لا تنتهي ولا تتقلب — هذا هو الودود. أفلا تُحبّه؟' },
-    { name: 'المجيد', meaning: 'بالغ المجد والشرف', explain: 'المجيد — بالغ المجد في ذاته وكرمه وعطائه. ومجده يُضفي شرفًا على مَن يخدمه ويتقرب إليه. رحلة التعافي التي تسير فيها — هي شرف ومجد، لأنك تصنعها لله المجيد. المجيد لا يُضيع مَن يسعى إليه — بل يرفع قدره ويُعلي شأنه في الدارين.' },
-    { name: 'الباعث', meaning: 'يبعث الموتى ويُحيي الأرواح', explain: 'الباعث — يبعث الموتى من قبورهم ويُحيي الأرواح الخامدة. وإحياء القلوب الميتة من أظهر مظاهر البعث في الدنيا. قلبك الذي تحس فيه بالموت وانعدام الإحساس من تراكم الذنوب — الباعث يُحييه. اطلب منه أن يبعث فيك روحًا جديدة، وقلبًا حيًّا يُحس بالله ويشتاق إليه.' },
-    { name: 'الشهيد', meaning: 'شاهد على كل شيء', explain: 'الشهيد — شاهد على كل شيء في كل لحظة لا يغيب عنه شيء. كل لحظة صمود شهدها الشهيد وسجّلها. كل نية صادقة في التغيير شهدها. كل دمعة خوف من الله شهدها. يومك اليوم — كل لحظة خير فيه ولو كانت في السر — مشهودة ومحفوظة. الشهيد لا ينسى.' },
-    { name: 'الحق', meaning: 'الثابت الوجود الحقيقي', explain: 'الحق — الثابت الوجود الحقيقي الذي لا يزول. كل ما حولك مؤقت وزائل — المتعة زائلة، الألم زائل، الدنيا كلها زائلة. والحق وحده الثابت الباقي. الثبات الذي تبحث عنه لا يأتي من التعلق بالزائل — بل من التعلق بالحق الثابت. "فذلكم الله ربكم الحق فماذا بعد الحق إلا الضلال."' },
-    { name: 'الوكيل', meaning: 'يتولى أمر من يتوكل عليه', explain: 'الوكيل — يتولى أمر مَن وكّل إليه أمره تولّيًا كاملًا. التوكل عليه لا يعني الكسل — بل يعني أن تعمل بكل ما في وسعك ثم تُسلّم النتيجة للوكيل. حين تُفوّض أمرك للوكيل تشعر بخفّة لا تُوصف — لأن حمل التحكم في كل شيء ينزل عن كاهلك. "حسبنا الله ونعم الوكيل."' },
-    { name: 'القوي', meaning: 'بالغ القوة لا يُعجزه شيء', explain: 'القوي — قوته مطلقة كاملة لا حدود لها ولا يُعجزه شيء. وحين تستمد قوتك منه لا من نفسك، تُصبح أقوى مما تتخيل. "لا حول ولا قوة إلا بالله" — ليست مجرد كلمة، بل إعلان أن قوتك مستمدة من القوي. ضعفك أمام الشهوة ليس نهايتك — لأن القوي يُعطي من قوته لمن لجأ إليه.' },
-    { name: 'المتين', meaning: 'شديد القوة والثبات', explain: 'المتين — شديد القوة والثبات، لا يتزعزع ولا يتأثر. متانته لا نهاية لها — لا تنقصه الأحداث ولا تُضعفه الأزمنة. والتعلق بالمتين يُعطيك ثباتًا في وسط العواصف. حين تتمسك بالمتين وسط عاصفة الإغراء والضعف والشك — تجد أن تمسّكك به هو الذي يُثبّتك.' },
-    { name: 'الولي', meaning: 'الناصر والمتولي لشؤون المؤمنين', explain: 'الولي — يتولى شؤون المؤمنين وينصرهم ويُسددهم. أنت لست وحدك في معركتك — وليّك أقوى من أي عدو. والولاية تعني أنه يهتم بتفاصيل حياتك ويُدبّر أمرك. مَن كان الله وليّه فمَن يخذله؟ استحضر معنى الولاية في أصعب لحظاتك — أنت تحت ولاية الله.' },
-    { name: 'الحميد', meaning: 'المحمود في أفعاله وصفاته', explain: 'الحميد — مستحق للحمد دائمًا في كل حال. كل نعمة تستحق حمده. وحمده ليس مجرد "الحمد لله" على اللسان — بل اعتراف قلبي عميق يُفتح به أبواب المزيد. "لئن شكرتم لأزيدنّكم." الحمد في الضيق أصعب وأعظم — والحميد يُقدّر هذا الحمد أكثر.' },
-    { name: 'المحصي', meaning: 'يُحصي كل شيء بدقة', explain: 'المحصي — يُحصي كل شيء بدقة لا تُخطئ. لا شيء يضيع في حسابه — كل خطوة خير خطوتها، كل لحظة صمود صمدتها، كل دمعة بكيتها خوفًا منه، كل استغفار رفعته في منتصف الليل. المحصي يحفظها كلها. يوم تلقاه ستجد أن كل صغيرة محفوظة — فلا تستهن بصغير من الخير.' },
-    { name: 'المبدئ', meaning: 'يبدأ الخلق من العدم', explain: 'المبدئ — أبدأ الخلق من لا شيء. وقادر أن يُبدئ معك صفحة جديدة من لا شيء. مهما أحسست أن ماضيك ثقيل وأن الرجوع مستحيل — المبدئ يبدأ الخلق من عدم، فكيف لا يبدأ معك مسيرة جديدة؟ البداية الحقيقية متاحة دائمًا لمَن لجأ للمبدئ.' },
-    { name: 'المعيد', meaning: 'يُعيد الخلق بعد الفناء', explain: 'المعيد — يُعيد الخلق بعد فنائه، لأن الإعادة عليه أيسر من البداية. ويُعيد — يُعيد الحياة للقلب الميت، يُعيد الأمل للنفس اليائسة، يُعيد البداية بعد كل سقوط. كل مرة تسقط فيها وتقول "لا أستطيع الرجوع" — تذكّر المعيد. الإعادة طبيعته وقدرته.' },
-    { name: 'المحيي', meaning: 'يُحيي الموتى والقلوب', explain: 'المحيي — يُحيي الموتى ويُحيي القلوب الخامدة. قلبك الذي تحس إنه مات وجفّ من تراكم الذنوب والبُعد — المحيي يُحييه. لا قلب ميت بالكامل ما دام صاحبه يطرق باب المحيي. اطلب منه اليوم: "يا محيي أحيِ قلبي، أحيِ فيّ الشوق إليك والخوف منك."' },
-    { name: 'المميت', meaning: 'بيده الحياة والموت', explain: 'المميت — بيده الموت يُقدّره على مَن يشاء متى يشاء. وتذكّر الموت ليس تشاؤمًا — بل هو أعظم مُصفٍّ للرؤية. لو عشت كل يوم بوعي حقيقي بأن الموت قادم، كثير من الشهوات تصغر وكثير من الأولويات تتغير. "أكثروا من ذكر هادم اللذات" — الموت يُقوّم المسار.' },
-    { name: 'الحي', meaning: 'الحي الذي لا يموت', explain: 'الحي — حياته مطلقة أزلية أبدية، لا يموت ولا ينام ولا يغفل. في أشد لحظاتك وحدةً — حين ينام الجميع وتصارع في الظلام — الحي موجود يعلم ويسمع ويرى. لا تشعر بالوحدة — لأنك مع الحي الذي لا يموت. هذا الاستحضار وحده يكفي لقطع الطريق على الوحشة.' },
-    { name: 'القيوم', meaning: 'القائم على كل شيء', explain: 'القيوم — يقوم على كل شيء في كل لحظة، لا تسقط الأمور من يده ولا تفلت من تدبيره. يقوم على أمرك في كل لحظة — يُدير أمور حياتك بدقة وحكمة. لا شيء في حياتك يحدث خارج علمه وتدبيره. والاطمئنان للقيوم يعني أنك تعيش بثقة أن أمرك في يد مَن لا يغفل.' },
-    { name: 'الواجد', meaning: 'يجد ما يشاء متى يشاء', explain: 'الواجد — لا يعجزه إيجاد شيء، يجد ما يريد متى يريد بلا تعب ولا بحث. ما تظنه مستحيلًا في حياتك — شفاء ما انكسر، تغيير ما ترسّخ، إصلاح ما فسد — هو الواجد يستطيع إيجاده. استحالته عندك ليست استحالة عنده. اطلب وتوقّع، لأن الواجد لا يُعجزه شيء.' },
-    { name: 'الماجد', meaning: 'الشريف الواسع الجود', explain: 'الماجد — جامع بين المجد والكرم والشرف والعطاء. مجده لا حدود له، وجوده لا ينضب. كل ما تحتاجه في رحلتك من قوة وثبات وصبر وتوفيق — عنده وزيادة. والماجد يُعطي بسعة لا تتناسب مع طلبك الصغير — لأن عطاءه على قدر مجده لا على قدر حاجتك.' },
-    { name: 'الواحد', meaning: 'الفرد الذي لا شريك له', explain: 'الواحد — لا شريك له في ذاته ولا في صفاته ولا في أفعاله ولا في استحقاق العبادة. وحدانيته تعني أن كل ما سواه لا يستحق أن تُعبّده بقلبك أو تتعلق به تعلقًا يُعبّدك له. الحرية الحقيقية في إفراد الواحد بالحب والخوف والرجاء — لأن مَن يعبد واحدًا يتحرر من عبودية كل ما سواه.' },
-    { name: 'الصمد', meaning: 'الذي يُقصد في الحاجات', explain: 'الصمد — يُقصد ويُلجأ إليه في كل حاجة وكل كربة. كل المخلوقات محتاجة إليه وهو غني عن الجميع. في حاجتك اليوم — حاجتك للثبات، للقوة، للمغفرة، للفرج — اقصده. الصمد هو الوحيد الذي لا يخذل ولا يملّ ولا تنفد عنده الأجوبة. اقصده مباشرة.' },
-    { name: 'القادر', meaning: 'يقدر على كل شيء', explain: 'القادر — قدرته مطلقة على كل شيء، لا يعجزه شيء في الأرض ولا في السماء. التغيير الذي تراه مستحيلًا في نفسك — هو القادر يستطيع إحداثه. النفس التي ترسّخت على عادة سيئة — القادر يقدر أن يقلبها. لا تحكم على نفسك بالاستحالة — لأن القادر معك.' },
-    { name: 'المقتدر', meaning: 'بالغ القدرة', explain: 'المقتدر — بالغ القدرة، صيغة مبالغة تعني أن قدرته أشد وأكمل من مجرد القدرة. اقتداره يتجاوز كل فهم وكل تصوّر. ومَن يستعين بالمقتدر لا يُهزم هزيمة نهائية. سقوطك ليس هزيمة نهائية — لأن المقتدر قادر أن يرفعك. قم ولا تيأس.' },
-    { name: 'المقدّم', meaning: 'يُقدّم من يشاء بحكمته', explain: 'المقدّم — يُقدّم ما يشاء في الوقت الصحيح بحكمته البالغة. ما قُدّم لك في هذه الحياة من ابتلاء أو نعمة — هو تقديم من الحكيم المقدّم. وما فاتك من فرصة أو شيء أردته — فيه تقديم لخير آخر. لا شيء يتقدم قبل أوانه ولا يتأخر عن وقته مع المقدّم.' },
-    { name: 'المؤخّر', meaning: 'يُؤخّر من يشاء بحكمته', explain: 'المؤخّر — يُؤخّر ما يشاء بحكمة بالغة لا تُرى بالعين المجردة. أحيانًا يُؤخّر الإجابة لأن التأخير هو عين الرحمة — لأنك لو أُعطيت ما طلبت في وقتك لكان ضارًا. وأحيانًا يُؤخّر البلاء لأن في التأخير مهلة ورحمة. ثق في توقيت المؤخّر — لأن توقيته أحكم من توقيتك.' },
-    { name: 'الأول', meaning: 'السابق على كل شيء', explain: 'الأول — موجود قبل كل شيء، لم يسبقه شيء. قبل أن تكون، قبل أن تُخلق الدنيا — كان يُحبك ويُدبّر أمرك. أنت لم تكن مصادفة في هذا الوجود — كنت مُرادًا ومُخططًا له. والذي أرادك قبل أن تكون — يريدك كذلك الآن في رحلة التعافي. أنت مُراد.' },
-    { name: 'الآخر', meaning: 'الباقي بعد فناء كل شيء', explain: 'الآخر — باقٍ بعد فناء كل شيء، لا يزول ولا ينتهي. كل شيء زائل إلا هو الآخر الباقي. المتعة التي تُغريك — زائلة. الألم الذي تُعانيه — زائل. الدنيا كلها بما فيها — زائلة. والتعلق بالزائل هو مصدر الألم الحقيقي. التعلق بالآخر الباقي هو الأمان الوحيد الحقيقي.' },
-    { name: 'الظاهر', meaning: 'الغالب الظاهر بآياته', explain: 'الظاهر — ظاهر بآياته وعلاماته في كل مكان. آياته في السماء والأرض والنفس، في كل نفَس تتنفسه، في كل خلية تعمل في جسدك دون أن تطلب. مَن يرى بقلبه يرى الظاهر في كل شيء. وأعظم آياته أنك خُلقت وأُعطيت فرصة التعافي — هذه آية.' },
-    { name: 'الباطن', meaning: 'المحتجب عن الأبصار', explain: 'الباطن — محتجب عن الأبصار لا تراه العيون في الدنيا. لكن بطونه لا يعني غيابه — بل هو أقرب مِن أن يُرى. "ونحن أقرب إليه من حبل الوريد." قلبك يُحسه حين يصفو من الذنوب والغفلة. النقاء الذي تسعى إليه في رحلتك هو ما يجعل القلب يُحس بالباطن القريب.' },
-    { name: 'الوالي', meaning: 'يتولى تدبير الكون', explain: 'الوالي — يتولى تدبير الكون كله بعلمه وقدرته. الكون كله في ولايته — وأنت جزء من هذا الكون، وتدبيره لك لا يتوقف. الوالي لا يُهمل شيئًا تحت ولايته — فكيف يُهملك أنت وأنت من أشرف ما خلق؟ تدبيره لك جارٍ في كل لحظة حتى حين لا تراه.' },
-    { name: 'المتعالي', meaning: 'المنزّه عن صفات النقص', explain: 'المتعالي — متعالٍ عن كل نقص وعيب وحاجة. تعاليه يعني أن أحكامه وقراراته نقية تمامًا من الهوى والمصلحة الشخصية والظلم. ما يحكم به عليك — نقيّ من كل غرض. وما يُقدّره لك — متعالٍ عن أي قصور. هذا يجعل التسليم له أيسر وأجمل.' },
-    { name: 'البر', meaning: 'واسع الإحسان', explain: 'البر — واسع الإحسان، يُحسن لعباده بما لا يستطيعون شكره. برّه يشمل كل خير وصلك منذ وُلدت — نعمة الإسلام، نعمة الإحساس بالخطأ، نعمة الرغبة في التغيير. عدّ نعمة واحدة بصدق — وستجد خلفها البر يُحيطك من كل جانب.' },
-    { name: 'التواب', meaning: 'كثير القبول للتوبة', explain: 'التواب — ليس مجرد قابل للتوبة، بل كثير القبول يُحبها ويفرح بها. "لله أشد فرحًا بتوبة عبده من أحدكم بضالته إذا وجدها." فرحه بتوبتك أعظم من فرحك بها. كلما رجعت إليه وجدته أمامك — باب التواب لا يُغلق. أنت تتوب اليوم — والتواب يستقبلك بفرح.' },
-    { name: 'المنتقم', meaning: 'ينتقم من الظالمين بعدله', explain: 'المنتقم — ينتقم من الظالمين بعدله المطلق في الوقت المناسب. ما ظُلمت فيه لم يُنسَ ولن يُنسى — المنتقم يأخذ الحق لأصحابه. وهذا اليقين يُريح القلب من ثقل الضغينة والغضب — لأنك لست مضطرًا لحمل ثأرك. سلّم أمر مَن ظلمك للمنتقم وتفرّغ لإصلاح نفسك.' },
-    { name: 'العفو', meaning: 'يعفو ويمحو أثر الذنب', explain: 'العفو — يمحو أثر الذنب محوًا كاملًا من الذاكرة الإلهية كأنه لم يقع. ليس فقط ستر ولا مجرد مغفرة — بل محو كامل لا يبقى منه أثر. وكان النبي ﷺ يدعو في العشر الأواخر: "اللهم إنك عفو تُحب العفو فاعفُ عني." الاسم الذي تطلبه في أحلك لحظات الذنب.' },
-    { name: 'الرؤوف', meaning: 'بالغ الرأفة والعطف', explain: 'الرؤوف — رأفته فوق الرحمة، حنان بالغ وعطف عميق. رأفته بك تظهر في أنه لا يُكلّفك ما لا تُطيق، ويُيسّر لك ما يصعب، ويُخفّف عنك في حال الضعف. أنت في رأفته الآن حتى وأنت تقرأ هذا في لحظة ضعف. الرؤوف يُحبك رغم كل شيء.' },
-    { name: 'مالك الملك', meaning: 'يملك الملك كله ويؤتيه من يشاء', explain: 'مالك الملك — يملك الملك كله ملكية حقيقية مطلقة. يُعطي الملك لمَن يشاء وينزعه ممَن يشاء بحكمته. ملوك الدنيا يملكون بإذنه وحتى حين يُريد. وهذا يعني أن كل تعلق بقوة غير الله أو مكانة أو مال — هو تعلق بشيء مؤقت قابل للزوال. تعلّق بمالك الملك فقط.' },
-    { name: 'ذو الجلال والإكرام', meaning: 'صاحب العظمة والتكريم', explain: 'ذو الجلال والإكرام — جمع بين الجلال المُهيب والإكرام المُحبّب. جلاله يستحق الخشوع والهيبة، وإكرامه يستحق المحبة والشكر. وأنت مُكرَّم عنده بتكريم الخلق في أحسن تقويم وبتكريم الإسلام والعقل والكرامة. لا تُهن نفسك بما يُهينها — فأنت مُكرَّم عند ذي الجلال والإكرام.' },
-    { name: 'المقسط', meaning: 'يُقسط ويعدل في كل شيء', explain: 'المقسط — يُقسّط ويعدل بين عباده بعدل كامل لا ميل فيه ولا جور. يُعطي كل ذي حق حقه في الوقت المناسب. ما ضاع منك من حق في الدنيا — محفوظ عند المقسط. وما أُخذ منك بغير وجه حق — المقسط يُعيده إليك يوم لا يضيع فيه شيء.' },
-    { name: 'الجامع', meaning: 'يجمع الخلائق ليوم الحساب', explain: 'الجامع — يجمع الخلائق ليوم الحساب لا يفوته أحد. ويجمع ما تفرّق — يجمع شتات قلبك المتشتّت، يجمع ما تفرّق من حياتك، يجمع بين ما تريد وما يُريد له. اطلب من الجامع أن يجمعك على طاعته وأن يجمع لك قلبًا مُوحّدًا يسير في اتجاه واحد.' },
-    { name: 'الغني', meaning: 'غير محتاج لأحد', explain: 'الغني — غني عن كل شيء وكل أحد، لا يحتاج طاعتك ولا عبادتك. غِناه المطلق يعني أن عطاءه لك ليس لأنه يحتاجك — بل لأنه يُحب العطاء ويُريد لك الخير. طاعتك لمصلحتك أنت وحدك لا له. ولذلك فعقوبته على المعصية — رحمة بك لا غضبًا عليك.' },
-    { name: 'المغني', meaning: 'يُغني من يشاء', explain: 'المغني — يُغني مَن يشاء بحكمته. والغنى الأعمق هو غنى القلب — "الغنى غنى النفس." القلب الغني بالله لا يحتاج ما يُهينه ولا يلتمس الرضا من الحرام. اطلب من المغني أن يُغني قلبك عن كل ما يُبعدك عنه — فغنى القلب هو الحرية الحقيقية.' },
-    { name: 'المانع', meaning: 'يمنع ما يضر عباده', explain: 'المانع — يمنع ما يضر بعباده حين يشاء. وأحيانًا منعه أعظم نعمه — يمنعك من شيء تريده لأن فيه ضررًا لم تره. ما مُنعت منه في حياتك وتألّمت — ربما كان المانع يحميك من خطر أكبر. ثق في منعه كما تثق في عطائه.' },
-    { name: 'الضار', meaning: 'يُقدّر الضر بحكمته', explain: 'الضار — الضر والنفع بيده وحده، لا يمسّك ضر إلا بإذنه وحكمته. وما يمسّك من ضر — فيه حكمة وتطهير وربما رفعة درجات. المرض والخسارة والألم — كلها من تقدير الضار الحكيم. والإيمان بهذا يُحوّل الضر من مصيبة إلى فرصة للقرب.' },
-    { name: 'النافع', meaning: 'يُقدّر النفع لمن يشاء', explain: 'النافع — النفع الحقيقي كله منه، لا من دواء ولا من إنسان ولا من سبب. الأسباب مجرد أدوات يُودعها النفع بإذنه. اطلب من النافع أن ينفعك بهذه الرحلة، وأن يجعل ألمك اليوم نفعًا لك غدًا وبعده.' },
-    { name: 'النور', meaning: 'نوره يُضيء الوجود كله', explain: 'النور — "اللَّهُ نُورُ السَّمَاوَاتِ وَالأَرْض." نوره يُضيء كل شيء ظاهر وباطن. في أظلم لحظاتك حين تحس أنك لا ترى طريقًا — النور موجود. لا ظلام يدوم مع النور. والقلب حين يقترب من النور يتنوّر. "نور على نور يهدي الله لنوره مَن يشاء."' },
-    { name: 'الهادي', meaning: 'يهدي من يشاء', explain: 'الهادي — يهدي مَن يشاء بحكمته وفضله. أنت هنا تُقاوم وتسعى — هذا دليل أن الهادي هداك لأول خطوة. الهداية ليست خطًا مستقيمًا — فيها تعثّر وعودة واستمرار. لكن الهادي يظل يُضيء لك الطريق خطوة خطوة. لا تطلب رؤية الطريق كله — فقط الخطوة القادمة.' },
-    { name: 'البديع', meaning: 'مبدع الخلق بلا مثال سابق', explain: 'البديع — أبدع الخلق بلا مثال سابق ولا نموذج مُسبق. ابتكر الوجود كله من لا شيء بجمال وإتقان. وقادر أن يبتكر في حياتك بداية لم تخطر على بالك، وطريقًا للخروج لم تره. البديع لا يعيد نفسه — ولكل حياة طريق خاص يبتكره البديع.' },
-    { name: 'الباقي', meaning: 'الدائم الذي لا يفنى', explain: 'الباقي — باقٍ بعد فناء كل شيء، لا يزول ولا يتغير. التعلق بالباقي هو الأمان الوحيد الذي لا يُخيّب. كل ما تعلّقت به وزال تألّمت — لأنك تعلّقت بزائل. التعلق بالباقي يُعطيك ثباتًا لا يهزّه فناء شيء، لأن ما تعلّق به لا يزول.' },
-    { name: 'الوارث', meaning: 'يرث الأرض ومن عليها', explain: 'الوارث — يرث الأرض ومن عليها بعد فناء الجميع. "وللَّه ميراث السموات والأرض." وهذا يُذكّرك أن كل ما تملكه أمانة مؤقتة ستُردّها للوارث. الدنيا أمانة لا ملكية — ومَن عاش بهذا الوعي لم تُثقله الدنيا ولم تُعبّده لشهواتها.' },
-    { name: 'الرشيد', meaning: 'يُرشد إلى الصواب', explain: 'الرشيد — يُوجّه لما فيه الرشد والصواب والصلاح. طريق التعافي طريق رشد — والرشيد يُوجّهك فيه. حين تحتار في قرار أو طريق، ادعه أن يُرشدك. "اللهم إني أسألك الهدى والتقى والعفاف والغنى" — دعاء يجمع طلب الرشاد.' },
-    { name: 'الصبور', meaning: 'يصبر على عباده كثيرًا', explain: 'الصبور — يصبر على عباده صبرًا لا يُوصف رغم معاصيهم وجحودهم. صبر الله عليك في كل مرة أخطأت وعدت — هو لطف لا يعادله شيء. الصبور لم ييأس منك رغم كل شيء. فلماذا تيأس من نفسك؟ إن كان الصبور صابرًا عليك، فأنت أحق أن تصبر على نفسك وعلى رحلتك.' },
+    { name: 'الرحمن', meaning: 'ذو الرحمة الواسعة', explain: 'رحمانيته سبقت كل شيء — قبل أن تُخلق، كانت رحمته معدّة لك. كل نفَس تتنفسه، وكل صحوة من نوم، هي لمسة من الرحمن. يومك اليوم محاط برحمة لم تطلبها — فقط أُعطيت لك.' },
+    { name: 'الرحيم', meaning: 'دائم الرحمة بالمؤمنين', explain: 'الرحيم خاصة بالمؤمنين — وأنت منهم. كل مرة قاومت فيها وانتصرت، هو الرحيم يدّك. وكل مرة سقطت وقمت، هو الرحيم يرفعك. رحمته لا تنقطع حتى في لحظات الضعف.' },
+    { name: 'الملك', meaning: 'المالك لكل شيء', explain: 'كل ما يقلقك — صحتك، مستقبلك، علاقاتك — هو يملكها. وملِك حقيقي لا يترك رعاياه ضائعين. استرح اليوم في ظل مَن يملك كل شيء ويُدبّر أمرك.' },
+    { name: 'القدوس', meaning: 'المنزّه عن كل نقص', explain: 'قدسيته تعني أنه لا يظلم أبدًا. ما تحسه من ألم أو غياب عدل — هو يراه. والقدوس لا يُضيع شيئًا. نقاؤه يوحي لك أنك ممكن تسعى للنقاء — لأنه أحبّه.' },
+    { name: 'السلام', meaning: 'مصدر السلام الحقيقي', explain: 'السلام الذي تبحث عنه في كل مكان — هو عنده. مش في لحظة متعة، مش في هروب. السلام الحقيقي يأتي فقط حين تسكن في قُرب السلام نفسه.' },
+    { name: 'التواب', meaning: 'كثير القبول للتوبة', explain: 'التواب — مش بس يقبل التوبة، بل يُحبها ويفرح بها. كلما رجعت إليه، وجدته أمامك. لا أحد تاب تابًا صادقًا ووجد الباب مغلقًا. أنت اليوم تتوب — والتواب يستقبلك.' },
+    { name: 'الغفور', meaning: 'يغفر الذنوب كلها', explain: 'الغفور يمحو — مش بس يستر. يمحو الذنب من السجل كأنه ما كانش. حجم الذنب لا يعني شيئًا أمام اتساع مغفرته. تذكر: غفرانه أكبر من خطيئتك دائمًا.' },
+    { name: 'الشكور', meaning: 'يُثيب على القليل كثيرًا', explain: 'كل خطوة صغيرة تخطوها نحو الطهر، هو يشكرها ويُثيب عليها. مقاومتك اليوم — ولو لدقائق — هو يراها ويُقدّرها. الشكور لا يُضيع جهدًا ولو كان مثقال ذرة.' },
+    { name: 'الحليم', meaning: 'لا يعجل بالعقوبة', explain: 'حلمه عليك وأنت في أحلك لحظاتك دليل على أنه لا يعاجل بالعقوبة. يُمهل ليُتاح لك الرجوع. حلمه ليس غفلة — بل حبًا واحتسابًا لعودتك.' },
+    { name: 'العليم', meaning: 'يعلم كل شيء', explain: 'يعلم ما في قلبك أكثر مما تعلم أنت. يعلم ألمك، صراعك، نيتك. ولأنه يعلم — حكمه عليك رحيم ودقيق. لا تخف أن "يكتشف" شيئًا — هو عالم وغافر.' },
+    { name: 'الكريم', meaning: 'واسع العطاء والجود', explain: 'الكريم يُعطي بلا حساب ولا منّ. كل نعمة في حياتك من كريم لم يبخل. وكرمه في الآخرة أعظم. اطلب منه اليوم بلا تردد — الكريم يُحب أن يُعطي.' },
+    { name: 'اللطيف', meaning: 'يصل لطفه لكل شيء خفي', explain: 'اللطيف يُدبّر أمورك من حيث لا ترى. أحيانًا تمر أيام وتحس إن ربنا بعيد — لكنه اللطيف يعمل في الخفاء لمصلحتك. ثق في لطفه حتى حين لا تراه.' },
+    { name: 'الودود', meaning: 'يحب عباده ويُحبّه العباد', explain: 'الودود يحبك — مش لأنك كامل، بل لأنه اختار أن يُحب. محبته لا تنتهي ولا تتوقف على أفعالك. عُد إليه وأنت تعلم أن الودود ينتظرك بمحبة.' },
+    { name: 'الصبور', meaning: 'يصبر على عباده كثيرًا', explain: 'صبر الله عليك في كل مرة أخطأت — هو لطف منه. الصبور لم ييأس منك. فلماذا تيأس من نفسك؟ إن كان الصبور صابرًا عليك، فأنت أحق أن تصبر على نفسك.' },
+    { name: 'الوكيل', meaning: 'يتولى أمر من يتوكل عليه', explain: 'فوّض أمرك للوكيل اليوم. مش معناه كسل — معناه أنك تعمل وتعلم أن النتيجة بيده. التوكل عليه يُريح القلب من ثقل التحكم.' },
+    { name: 'المجيب', meaning: 'يجيب دعاء من دعاه', explain: 'كل دعاء ترفعه — المجيب يسمعه. قد يجيب بطريقة لا تتخيلها، أو في وقت لا تتوقعه — لكنه لا يُهمل مَن ناداه. نادِه اليوم.' },
+    { name: 'الحق', meaning: 'الثابت الوجود الحقيقي', explain: 'كل ما حولك مؤقت وزائل — والحق وحده الثابت. الثبات الذي تبحث عنه يأتي من التعلق بالحق.' },
+    { name: 'القريب', meaning: 'قريب من كل عبد', explain: 'ونحن أقرب إليه من حبل الوريد. القريب ليس في السماء البعيدة فقط — هو أقرب لقلبك من نفسك. في أحلك اللحظات، ارفع رأسك — هو هناك.' },
+    { name: 'الرزاق', meaning: 'يرزق كل شيء', explain: 'رزقك مكتوب وما ينقص. ومنه رزق الإرادة والقوة على المقاومة. اطلب منه اليوم أن يرزقك قوة تتجاوز بها لحظة ضعفك.' },
+    { name: 'الحي القيوم', meaning: 'الحي الدائم القائم على كل شيء', explain: 'الحي القيوم — لا ينام ولا يغفل. في منتصف الليل حين تصارع وحدك، هو القيوم يراك ويقوم على أمرك. لستَ وحدك أبدًا.' },
+    { name: 'العفو', meaning: 'يعفو ويمحو أثر الذنب', explain: 'العفو يمحو حتى أثر الذنب من الذاكرة الإلهية. لا يبقى منه شيء. ليس فقط ستر — بل محو كامل. هذا هو ربك اليوم.' },
+    { name: 'النور', meaning: 'نوره يُضيء الوجود كله', explain: 'اللَّهُ نُورُ السَّمَاوَاتِ وَالأَرْض. في أظلم لحظاتك — النور موجود. اقتربه يُضئ لك الطريق. لا ظلام يدوم مع النور.' },
+    { name: 'الهادي', meaning: 'يهدي من يشاء', explain: 'أنت هنا، تقرأ هذا، تُقاوم — هو الهادي الذي هداك. الهداية ليست خطًا مستقيمًا — أحيانًا تعثّر وعودة. لكن الهادي يظل يشير للطريق.' },
+    { name: 'الغني', meaning: 'غير محتاج لأحد', explain: 'غِناه يعني أن عطاءه لك ليس لأنه يحتاجك — بل لأنه يُحب العطاء. طاعتك لمصلحتك أنت لا له.' },
+    { name: 'الفتاح', meaning: 'يفتح أبواب الرحمة والرزق', explain: 'كل باب حُسم في وجهك، هو الفتاح يفتح غيره. ربما ما تظنه إغلاقًا هو توجيه نحو باب أفضل. لا تستسلم — الفتاح لم يُغلق عليك كل الأبواب.' },
+    { name: 'البصير', meaning: 'يرى كل شيء', explain: 'يرى صراعك الداخلي الذي لا يراه أحد. يرى المرة التي أردت الخطأ فمنعت نفسك. يرى الدمعة الخفية. ولأنه يرى — هو يُثيب على ما لا يراه الناس.' },
+    { name: 'الشهيد', meaning: 'شاهد على كل شيء', explain: 'كل لحظة صمود شهدها الشهيد. كل نية صادقة سجّلها. يومك اليوم — كل لحظة خير فيه — مشهود ومحفوظ عنده.' },
+    { name: 'الواسع', meaning: 'رحمته وعلمه يسع كل شيء', explain: 'مهما بلغ ذنبك، رحمته أوسع. مهما كان همّك، قدرته أوسع. الواسع لا يضيق.' },
+    { name: 'القهار', meaning: 'يقهر كل شيء بقدرته', explain: 'القهار يقهر الشيطان ويقهر الشهوة. لو استعنت به، قوته فيك أعظم من قوة عدوك. "لا حول ولا قوة إلا بالله" — طلب من قهاريته.' },
+    { name: 'الولي', meaning: 'الناصر والمتولي لشؤون المؤمنين', explain: 'الولي يتولى أمر مَن آمن به. أنت لست وحدك في معركتك — وليّك أقوى من أي عدو.' },
   ];
-
-
 
   function showAllahName() {
     const today = new Date();
-    const idx = Math.floor(Math.random() * ALLAH_NAMES.length);
+    const idx = (today.getFullYear() * 366 + today.getMonth() * 31 + today.getDate()) % ALLAH_NAMES.length;
     const n = ALLAH_NAMES[idx];
     document.getElementById('allahName').textContent = n.name;
     document.getElementById('allahMeaning').textContent = n.meaning;
     document.getElementById('allahExplain').textContent = n.explain;
-    document.getElementById('allahModal').classList.add('show');
+    const lastSeen = localStorage.getItem('allahModalDate');
+    const todayStr = today.toISOString().split('T')[0];
+    if (lastSeen !== todayStr) {
+      document.getElementById('allahModal').classList.add('show');
+    }
   }
 
   function closeAllahModal() {
@@ -3080,6 +3575,375 @@
 
   loadEmergencyContent();
   updateStats();
+
+  // =============================================
+  // PANIC BUTTON & URGE SURFING TIMER
+  // =============================================
+  const URGE_MESSAGES = [
+    { text: 'اجلس بهدوء — لاحظ الإحساس بدون أن تتصرف بناءً عليه', source: 'تقنية Urge Surfing' },
+    { text: '﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾ — الرغبة مؤقتة، والأجر دائم', source: 'سورة الشرح — الآية ٦' },
+    { text: 'تنفس ببطء... شهيق ٤ ثوانٍ، احتباس ٤، زفير ٦', source: 'تنفس البطن العميق' },
+    { text: 'هذه اللحظة ستمر — كل لحظة ثبات فيها تبني إنساناً أقوى', source: 'تذكير الثبات' },
+    { text: '﴿لَا تَقْنَطُوا مِن رَّحْمَةِ اللَّهِ﴾ — ابقَ ولا تستسلم الآن', source: 'سورة الزمر — الآية ٥٣' },
+    { text: 'قل بصوت: "أعوذ بالله من الشيطان الرجيم" — الصوت يكسر الخيال', source: 'درع الطوارئ' },
+    { text: 'الرغبة ليست أنت — هي موجة عابرة، وأنت الشاطئ الثابت', source: 'علم الأعصاب' },
+    { text: 'فكر في واحد يحبك — أمك، ربنا، مستقبلك. هل تستحق اللحظة دي؟', source: 'تذكير بالقيم' },
+    { text: 'قم وأخرج من المكان فوراً — تغيير البيئة يكسر الحلقة', source: 'درع الطوارئ' },
+    { text: '﴿وَاللَّهُ يَعِدُكُم مَّغْفِرَةً مِّنْهُ وَفَضْلًا﴾ — الله معك الآن', source: 'سورة البقرة — الآية ٢٦٨' },
+    { text: 'كل ثانية تصبر فيها = دليل على إنك أقوى من هذه اللحظة', source: 'رسالة لنفسك' },
+    { text: 'اغسل وجهك بماء بارد — الصدمة الحسية تعيد ضبط العقل', source: 'درع الطوارئ' },
+    { text: 'عدد ٥ أشياء تراها، ٤ تسمعها، ٣ تلمسها — عود لجسدك', source: 'تقنية التأريض' },
+  ];
+
+  let urgeTimerInterval = null;
+  let urgeMsgInterval = null;
+  let urgeTotalSeconds = 600;
+  let urgeRemaining = 600;
+  let urgeMsgIndex = 0;
+  const CIRCUMFERENCE = 2 * Math.PI * 70; // r=70
+
+  function openPanicOverlay() {
+    document.getElementById('panicOverlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+    // Reset & auto-start immediately
+    clearInterval(urgeTimerInterval);
+    clearInterval(urgeMsgInterval);
+    urgeRemaining = urgeTotalSeconds;
+    urgeMsgIndex = 0;
+    document.getElementById('urgeTimerDisplay').textContent = '10:00';
+    const prog = document.getElementById('urgeRingProg');
+    prog.style.strokeDasharray = CIRCUMFERENCE;
+    prog.style.strokeDashoffset = 0;
+    // Load rescue link
+    const videoUrl = localStorage.getItem('emergency_video_url');
+    const videoText = localStorage.getItem('emergency_video_text');
+    if (videoUrl || videoText) {
+      document.getElementById('panicMediaContent').innerHTML =
+        (videoText ? '<div style="margin-bottom:0.4rem;">' + videoText + '</div>' : '') +
+        (videoUrl ? '<a href="' + videoUrl + '" target="_blank">▶ افتح مصدر الإنقاذ ↗</a>' : '');
+    }
+    // Show first message immediately
+    showUrgeMessage(0);
+    // Start timer right away
+    startUrgeTimer();
+    // Rotate messages every 20s
+    urgeMsgInterval = setInterval(() => {
+      urgeMsgIndex = (urgeMsgIndex + 1) % URGE_MESSAGES.length;
+      showUrgeMessage(urgeMsgIndex);
+    }, 20000);
+  }
+
+  function showUrgeMessage(idx) {
+    const el = document.getElementById('urgeMsgText');
+    const msg = URGE_MESSAGES[idx];
+    el.classList.remove('fade-in');
+    el.classList.add('fade-out');
+    setTimeout(() => {
+      el.innerHTML = msg.text + '<span class="urge-msg-source">' + msg.source + '</span>';
+      el.classList.remove('fade-out');
+      el.classList.add('fade-in');
+    }, 700);
+  }
+
+  function closePanicOverlay() {
+    document.getElementById('panicOverlay').classList.remove('show');
+    document.body.style.overflow = '';
+    clearInterval(urgeTimerInterval);
+    clearInterval(urgeMsgInterval);
+    urgeTimerInterval = null;
+    urgeMsgInterval = null;
+  }
+
+  function startUrgeTimer() {
+    urgeTimerInterval = setInterval(() => {
+      urgeRemaining--;
+      if (urgeRemaining < 0) urgeRemaining = 0;
+      const mins = Math.floor(urgeRemaining / 60);
+      const secs = urgeRemaining % 60;
+      document.getElementById('urgeTimerDisplay').textContent =
+        String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
+      // Ring progress (draining clockwise)
+      const prog = document.getElementById('urgeRingProg');
+      const offset = CIRCUMFERENCE * (1 - urgeRemaining / urgeTotalSeconds);
+      prog.style.strokeDashoffset = offset;
+      if (urgeRemaining === 0) {
+        clearInterval(urgeTimerInterval);
+        clearInterval(urgeMsgInterval);
+        urgeTimerInterval = null;
+        urgeMsgInterval = null;
+        const el = document.getElementById('urgeMsgText');
+        el.classList.add('fade-out');
+        setTimeout(() => {
+          el.innerHTML = '✅ أنت عديت الموجة كاملةً — الرغبة مرت وأنت أقوى منها<span class="urge-msg-source">١٠ دقائق ثبات — مبروك</span>';
+          el.classList.remove('fade-out');
+          el.classList.add('fade-in');
+        }, 700);
+        showToast('🌿 عديت الموجة — أنت أقوى منها!', 'green');
+      }
+    }, 1000);
+  }
+
+  // =============================================
+  // DATA BACKUP — EXPORT & IMPORT (GLOBAL)
+  // =============================================
+  function exportData() {
+    const data = { _meta: { exportedAt: new Date().toISOString(), app: 'محمد التعافي' } };
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      data[key] = localStorage.getItem(key);
+    }
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const dateStr = new Date().toISOString().slice(0,10);
+    a.href = url;
+    a.download = 'محمد_التعافي_backup_' + dateStr + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    const keyCount = Object.keys(data).length - 1; // exclude _meta
+    showToast('💾 تم تصدير ' + keyCount + ' عنصر بنجاح!', 'gold');
+  }
+
+  function importData(input) {
+    const file = input.files[0];
+    if (!file) return;
+    if (!file.name.endsWith('.json')) {
+      showToast('⚠️ يجب اختيار ملف JSON فقط', '');
+      input.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const raw = e.target.result;
+        const data = JSON.parse(raw);
+        if (typeof data !== 'object' || Array.isArray(data)) throw new Error('format');
+        // Filter out _meta key
+        const entries = Object.entries(data).filter(([k]) => k !== '_meta');
+        if (entries.length === 0) throw new Error('empty');
+        const exportedAt = data._meta?.exportedAt
+          ? new Date(data._meta.exportedAt).toLocaleDateString('ar-EG')
+          : 'غير معروف';
+        if (!confirm(
+          'سيتم استيراد ' + entries.length + ' عنصر\n' +
+          'تاريخ النسخة: ' + exportedAt + '\n\n' +
+          '⚠️ سيُستبدل كل شيء موجود — هل تريد المتابعة؟'
+        )) {
+          input.value = '';
+          return;
+        }
+        localStorage.clear();
+        entries.forEach(([key, val]) => localStorage.setItem(key, val));
+        input.value = '';
+        showToast('✅ تم استيراد ' + entries.length + ' عنصر — جارٍ إعادة التحميل...', 'green');
+        setTimeout(() => location.reload(), 1800);
+      } catch(err) {
+        input.value = '';
+        showToast('⚠️ ملف غير صالح — تأكد من اختيار ملف النسخ الاحتياطي الصحيح', '');
+      }
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+
+  // =============================================
+  // QURAN TADABBUR
+  // =============================================
+  function showAddAyahModal() {
+    ['ayahRefInput','ayahTextInput','ayahTadabburInput','ayahSourceInput','ayahImgInput'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('addAyahModal').classList.add('show');
+    setTimeout(() => document.getElementById('ayahRefInput').focus(), 100);
+  }
+  function closeAddAyahModal() { document.getElementById('addAyahModal').classList.remove('show'); }
+
+  function saveAyah() {
+    const ref = document.getElementById('ayahRefInput').value.trim();
+    const text = document.getElementById('ayahTextInput').value.trim();
+    if (!ref || !text) { showToast('⚠️ أدخل المرجع ونص الآية', ''); return; }
+    const tadabbur = document.getElementById('ayahTadabburInput').value.trim();
+    const source = document.getElementById('ayahSourceInput').value.trim();
+    const img = document.getElementById('ayahImgInput').value.trim();
+    const ayat = JSON.parse(localStorage.getItem('quran_ayat') || '[]');
+    ayat.unshift({ ref, text, tadabbur, source, img, id: Date.now() });
+    localStorage.setItem('quran_ayat', JSON.stringify(ayat));
+    closeAddAyahModal();
+    renderCustomAyat();
+    showToast('📖 تمت إضافة الآية!', 'gold');
+  }
+
+  function toggleAyahTadabbur(btn) {
+    const body = btn.nextElementSibling;
+    body.classList.toggle('open');
+    btn.textContent = body.classList.contains('open') ? '▲ إخفاء التدبر' : '💡 التدبر والمعنى';
+  }
+
+  function renderCustomAyat() {
+    const ayat = JSON.parse(localStorage.getItem('quran_ayat') || '[]');
+    const container = document.getElementById('customAyatList');
+    container.innerHTML = '';
+    ayat.forEach((a, i) => {
+      const div = document.createElement('div');
+      div.className = 'ayah-card';
+      const imgHtml = a.img
+        ? `<img class="ayah-card-img" src="${a.img}" alt="آية" onerror="this.style.display='none'">`
+        : `<div class="ayah-card-img-placeholder">📜</div>`;
+      const tadabburHtml = a.tadabbur
+        ? `<button class="ayah-card-tadabbur-toggle" onclick="toggleAyahTadabbur(this)">💡 التدبر والمعنى</button>
+           <div class="ayah-card-tadabbur"><strong>التدبر:</strong> ${a.tadabbur}${a.source ? '<div class="ayah-card-source">— ' + a.source + '</div>' : ''}</div>` : '';
+      div.innerHTML = `${imgHtml}
+        <div class="ayah-card-body">
+          <div class="ayah-card-ref">${a.ref}</div>
+          <div class="ayah-card-text">${a.text}</div>
+          ${tadabburHtml}
+        </div>
+        <div class="ayah-card-footer">
+          <button class="ayah-card-delete" onclick="deleteAyah(${i})" title="حذف">✕ حذف</button>
+        </div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function deleteAyah(i) {
+    const ayat = JSON.parse(localStorage.getItem('quran_ayat') || '[]');
+    ayat.splice(i, 1);
+    localStorage.setItem('quran_ayat', JSON.stringify(ayat));
+    renderCustomAyat();
+    showToast('🗑 تم الحذف', '');
+  }
+
+  // =============================================
+  // PRAYER TRACKER
+  // =============================================
+  const PRAYERS = [
+    { key: 'fajr', name: 'الفجر', emoji: '🌙' },
+    { key: 'dhuhr', name: 'الظهر', emoji: '☀️' },
+    { key: 'asr', name: 'العصر', emoji: '🌤' },
+    { key: 'maghrib', name: 'المغرب', emoji: '🌅' },
+    { key: 'isha', name: 'العشاء', emoji: '🌃' }
+  ];
+
+  function getTodayKey() {
+    return new Date().toISOString().slice(0,10);
+  }
+
+  function initPrayerSection() {
+    const today = getTodayKey();
+    const dateObj = new Date();
+    document.getElementById('prayerTodayDate').textContent =
+      dateObj.toLocaleDateString('ar-EG', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+    // Render today's prayer grid
+    const todayData = JSON.parse(localStorage.getItem('prayer_' + today) || '{}');
+    const grid = document.getElementById('prayerGrid');
+    grid.innerHTML = '';
+    PRAYERS.forEach(p => {
+      const state = todayData[p.key] || 'none'; // none | done | late
+      const cell = document.createElement('div');
+      cell.className = 'prayer-cell' + (state === 'done' ? ' done' : state === 'late' ? ' late' : '');
+      cell.dataset.key = p.key;
+      cell.innerHTML = `
+        <div class="prayer-name">${p.emoji} ${p.name}</div>
+        <div class="prayer-check">${state === 'done' ? '✅' : state === 'late' ? '🟡' : '⚪'}</div>
+        <div class="prayer-status-label">${state === 'done' ? 'أُدِّيت' : state === 'late' ? 'قضاء' : 'لم تُصَلَّ'}</div>`;
+      cell.addEventListener('click', () => cyclePrayerState(cell, p.key, today));
+      grid.appendChild(cell);
+    });
+
+    renderPrayerHistory();
+    calcPrayerStreak();
+  }
+
+  function cyclePrayerState(cell, key, dayKey) {
+    const states = ['none','done','late'];
+    const cur = cell.classList.contains('done') ? 'done' : cell.classList.contains('late') ? 'late' : 'none';
+    const next = states[(states.indexOf(cur) + 1) % states.length];
+    cell.className = 'prayer-cell' + (next === 'done' ? ' done' : next === 'late' ? ' late' : '');
+    cell.querySelector('.prayer-check').textContent = next === 'done' ? '✅' : next === 'late' ? '🟡' : '⚪';
+    cell.querySelector('.prayer-status-label').textContent = next === 'done' ? 'أُدِّيت' : next === 'late' ? 'قضاء' : 'لم تُصَلَّ';
+    const data = JSON.parse(localStorage.getItem('prayer_' + dayKey) || '{}');
+    data[key] = next;
+    localStorage.setItem('prayer_' + dayKey, JSON.stringify(data));
+  }
+
+  function savePrayerDay() {
+    const today = getTodayKey();
+    const data = JSON.parse(localStorage.getItem('prayer_' + today) || '{}');
+    // Save a snapshot in history list
+    const history = JSON.parse(localStorage.getItem('prayer_history') || '[]');
+    const existing = history.findIndex(h => h.date === today);
+    const entry = { date: today, prayers: data };
+    if (existing >= 0) history[existing] = entry;
+    else history.unshift(entry);
+    // Keep last 30 days
+    if (history.length > 30) history.pop();
+    localStorage.setItem('prayer_history', JSON.stringify(history));
+    renderPrayerHistory();
+    calcPrayerStreak();
+    showToast('✅ تم حفظ صلوات اليوم!', 'green');
+  }
+
+  function resetPrayerDay() {
+    const today = getTodayKey();
+    localStorage.removeItem('prayer_' + today);
+    initPrayerSection();
+    showToast('🔄 تم إعادة تعيين اليوم', '');
+  }
+
+  function renderPrayerHistory() {
+    const history = JSON.parse(localStorage.getItem('prayer_history') || '[]');
+    const container = document.getElementById('prayerHistory');
+    const empty = document.getElementById('prayerHistoryEmpty');
+    container.innerHTML = '';
+    empty.style.display = history.length ? 'none' : 'block';
+    history.forEach(h => {
+      const dateLabel = new Date(h.date).toLocaleDateString('ar-EG', { weekday:'short', month:'short', day:'numeric' });
+      const dots = PRAYERS.map(p => {
+        const s = (h.prayers || {})[p.key] || 'none';
+        return `<div class="p-dot ${s}" title="${p.name}"></div>`;
+      }).join('');
+      const allDone = PRAYERS.every(p => (h.prayers || {})[p.key] === 'done');
+      const row = document.createElement('div');
+      row.className = 'prayer-history-item';
+      row.innerHTML = `
+        <div class="prayer-history-date">${dateLabel} ${allDone ? '✨' : ''}</div>
+        <div class="prayer-history-dots">${dots}</div>`;
+      container.appendChild(row);
+    });
+  }
+
+  function calcPrayerStreak() {
+    const history = JSON.parse(localStorage.getItem('prayer_history') || '[]');
+    let streak = 0;
+    for (let i = 0; i < history.length; i++) {
+      const allDone = PRAYERS.every(p => (history[i].prayers || {})[p.key] === 'done');
+      if (allDone) streak++;
+      else break;
+    }
+    document.getElementById('prayerStreakNum').textContent = streak;
+  }
+
+  // =============================================
+  // INIT NEW SECTIONS
+  // =============================================
+  renderCustomAyat();
+  initPrayerSection();
+
+  // Re-init prayer when section shown
+  const origShowSection = showSection;
+  // Override to init prayer on open
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      setTimeout(() => {
+        if (document.getElementById('section-prayer').classList.contains('active')) {
+          initPrayerSection();
+        }
+      }, 50);
+    });
+  });
 </script>
 </body>
 </html>
